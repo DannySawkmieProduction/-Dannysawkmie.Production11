@@ -197,9 +197,9 @@
   <div class="w-full max-w-sm bg-[#faf8f5] rounded-3xl p-6 text-center">
     <h3 class="text-xl font-bold text-[#0f241d] mb-4">Assistance Required?</h3>
     <div class="space-y-3">
-      <button onclick="sendAssistance('Call server to take custom query')" class="w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">🙋 Call Server</button>
-      <button onclick="sendAssistance('Bring fresh drinking water')" class="w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💧 Bring Water</button>
-      <button onclick="sendAssistance('Request Physical Bill')" class="w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💳 Request Bill</button>
+      <button data-assist="Call server to take custom query" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">🙋 Call Server</button>
+      <button data-assist="Bring fresh drinking water" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💧 Bring Water</button>
+      <button data-assist="Request Physical Bill" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💳 Request Bill</button>
     </div>
     <button id="closeAssistanceBtn" class="mt-4 text-[10px] text-gray-400 uppercase">Cancel</button>
   </div>
@@ -225,7 +225,7 @@ const WHATSAPP_NUMBER = "917002979238";
 const CLOUDFLARE_WORKER_URL = "https://golden.dan-brayasky.workers.dev/";
 
 async function notifyBackend(type, data){
-  if (!CLOUDFLARE_WORKER_URL) return; // silently skip until the Worker URL is configured
+  if (!CLOUDFLARE_WORKER_URL) return;
   try {
     await fetch(CLOUDFLARE_WORKER_URL, {
       method: 'POST',
@@ -234,7 +234,6 @@ async function notifyBackend(type, data){
     });
   } catch (e) {
     console.error('Backend notify failed:', e);
-    // Deliberately not shown to the guest — WhatsApp is the primary channel and already succeeded/failed independently.
   }
 }
 
@@ -258,7 +257,7 @@ function showToast(message){
 
 function openWhatsApp(message){
   if (!isWhatsAppConfigured()){
-    showToast('WhatsApp ordering isn\'t set up yet — the restaurant needs to add their number in the site settings.');
+    showToast("WhatsApp ordering isn't set up yet — the restaurant needs to add their number in the site settings.");
     return;
   }
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
@@ -477,16 +476,65 @@ let currentCategory = Object.keys(menuData)[0];
 let activeTag = "All";
 let layout = "grid";
 
+// ===== EVENT DELEGATION SETUP =====
+// Instead of inline onclick, we use data attributes and event delegation
+
+function setupEventDelegation() {
+  // Menu items grid - handles add-to-cart clicks
+  document.getElementById('menuItemsGrid').addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-action="add-to-cart"]');
+    if (btn) {
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price);
+      addToCart(name, price);
+    }
+  });
+
+  // Thali list - handles add-to-cart clicks
+  document.getElementById('thaliList').addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-action="add-to-cart"]');
+    if (btn) {
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price);
+      addToCart(name, price);
+    }
+  });
+
+  // Cart items list - handles increment, decrement, remove
+  document.getElementById('cartItemsList').addEventListener('click', function(e) {
+    const incBtn = e.target.closest('[data-action="increment"]');
+    const decBtn = e.target.closest('[data-action="decrement"]');
+    const remBtn = e.target.closest('[data-action="remove"]');
+
+    if (incBtn) {
+      incrementCart(parseInt(incBtn.dataset.index));
+    } else if (decBtn) {
+      decrementCart(parseInt(decBtn.dataset.index));
+    } else if (remBtn) {
+      removeFromCart(parseInt(remBtn.dataset.index));
+    }
+  });
+
+  // Assistance modal buttons
+  document.querySelectorAll('.assist-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      sendAssistance(this.dataset.assist);
+    });
+  });
+}
+
 function renderThali(){
   const box = document.getElementById('thaliList');
-  box.innerHTML = thaliData.map(t => `
-    <div class="flex justify-between items-center bg-[#0d211a] p-3 rounded-lg border border-[#d4af37]/15">
+  box.innerHTML = thaliData.map(t => {
+    const safeName = t.name.replace(/"/g, '&quot;');
+    return `<div class="flex justify-between items-center bg-[#0d211a] p-3 rounded-lg border border-[#d4af37]/15">
       <div><h4 class="text-xs font-bold text-white">${t.name}</h4><p class="text-[10px] text-gray-400">${t.desc}</p></div>
       <div class="text-right">
         <span class="text-[#d4af37] text-xs font-bold block">₹${t.price}</span>
-        <button onclick="addToCart('${t.name.replace(/'/g,"\\'")}', ${t.price})" class="text-[9px] bg-[#d4af37]/20 text-[#d4af37] px-2.5 py-1 rounded-full hover:bg-[#d4af37] hover:text-[#0f241d] font-bold mt-1">+ ADD</button>
+        <button data-action="add-to-cart" data-name="${safeName}" data-price="${t.price}" class="text-[9px] bg-[#d4af37]/20 text-[#d4af37] px-2.5 py-1 rounded-full hover:bg-[#d4af37] hover:text-[#0f241d] font-bold mt-1">+ ADD</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderTabs(){
@@ -513,7 +561,6 @@ function renderTagFilters(){
 
 function renderMenu(){
   document.getElementById('currentCategoryTitle').textContent = currentCategory;
-  document.getElementById('currentCategoryDesc') && (document.getElementById('currentCategoryDesc').textContent = menuData[currentCategory]?.desc || '');
   const grid = document.getElementById('menuItemsGrid');
   const noResults = document.getElementById('noResults');
   const searchTerm = (document.getElementById('searchInput').value || document.getElementById('searchInputMobile').value || '').toLowerCase().trim();
@@ -535,6 +582,8 @@ function renderMenu(){
     const tagBadges = item.tags.map(t => `<span class="text-[9px] uppercase tracking-wide bg-[#d4af37]/10 text-[#d4af37] px-2 py-0.5 rounded-full">${t}</span>`).join(' ');
     const cartQty = getCartQty(item.name);
     const qtyBadge = cartQty > 0 ? `<span class="text-[9px] bg-[#d4af37] text-[#0f241d] rounded-full w-4 h-4 flex items-center justify-center font-bold absolute -top-1.5 -right-1.5">${cartQty}</span>` : '';
+    const safeName = item.name.replace(/"/g, '&quot;');
+
     if (layout === "grid"){
       return `<div class="menu-card animate-entry rounded-xl p-4 flex flex-col justify-between">
         <div>
@@ -544,14 +593,14 @@ function renderMenu(){
           </div>
           <div class="flex flex-wrap gap-1.5 mt-2">${tagBadges}</div>
         </div>
-        <button onclick="addToCart('${item.name.replace(/'/g,"\\'")}', ${item.price})" class="relative w-full mt-4 py-2 bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 rounded text-xs font-bold hover:bg-[#d4af37] hover:text-[#0f241d]">ADD${qtyBadge}</button>
+        <button data-action="add-to-cart" data-name="${safeName}" data-price="${item.price}" class="relative w-full mt-4 py-2 bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 rounded text-xs font-bold hover:bg-[#d4af37] hover:text-[#0f241d]">ADD${qtyBadge}</button>
       </div>`;
     }
     return `<div class="menu-card animate-entry rounded-xl p-3 flex items-center justify-between">
       <div><h4 class="text-sm font-bold text-white">${item.name}</h4><div class="flex flex-wrap gap-1.5 mt-1">${tagBadges}</div></div>
       <div class="text-right flex items-center gap-3">
         <span class="text-[#d4af37] font-bold text-sm">₹${item.price}</span>
-        <button onclick="addToCart('${item.name.replace(/'/g,"\\'")}', ${item.price})" class="relative py-1.5 px-3 bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 rounded text-xs font-bold hover:bg-[#d4af37] hover:text-[#0f241d]">ADD${qtyBadge}</button>
+        <button data-action="add-to-cart" data-name="${safeName}" data-price="${item.price}" class="relative py-1.5 px-3 bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 rounded text-xs font-bold hover:bg-[#d4af37] hover:text-[#0f241d]">ADD${qtyBadge}</button>
       </div>
     </div>`;
   }).join('');
@@ -582,7 +631,7 @@ function removeFromCart(i){ cart.splice(i, 1); updateCartCount(); }
 function cartTotalItems(){ return cart.reduce((s, i) => s + i.qty, 0); }
 
 function saveCart(){
-  try { sessionStorage.setItem('goldenPineCart', JSON.stringify(cart)); } catch(e) { /* storage unavailable, cart just won't persist across refresh */ }
+  try { sessionStorage.setItem('goldenPineCart', JSON.stringify(cart)); } catch(e) { }
 }
 
 function loadCart(){
@@ -613,11 +662,11 @@ function renderCart(){
           <span class="text-[10px] text-gray-500">₹${item.price} each</span>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
-          <button onclick="decrementCart(${i})" class="w-6 h-6 rounded-full bg-[#143228] text-[#d4af37] text-xs flex items-center justify-center hover:bg-[#d4af37] hover:text-[#0f241d]">−</button>
+          <button data-action="decrement" data-index="${i}" class="w-6 h-6 rounded-full bg-[#143228] text-[#d4af37] text-xs flex items-center justify-center hover:bg-[#d4af37] hover:text-[#0f241d]">−</button>
           <span class="text-xs text-white w-4 text-center">${item.qty}</span>
-          <button onclick="incrementCart(${i})" class="w-6 h-6 rounded-full bg-[#143228] text-[#d4af37] text-xs flex items-center justify-center hover:bg-[#d4af37] hover:text-[#0f241d]">+</button>
+          <button data-action="increment" data-index="${i}" class="w-6 h-6 rounded-full bg-[#143228] text-[#d4af37] text-xs flex items-center justify-center hover:bg-[#d4af37] hover:text-[#0f241d]">+</button>
           <span class="text-[#d4af37] text-xs font-bold w-12 text-right">₹${item.price * item.qty}</span>
-          <button onclick="removeFromCart(${i})" class="text-gray-500 hover:text-red-400 text-xs"><i class="fa fa-times"></i></button>
+          <button data-action="remove" data-index="${i}" class="text-gray-500 hover:text-red-400 text-xs"><i class="fa fa-times"></i></button>
         </div>
       </div>`).join('');
   }
@@ -635,29 +684,29 @@ function sendAssistance(type){
   document.getElementById('assistanceModal').classList.remove('flex');
 }
 
-// Wiring
-document.getElementById('viewCartBtn').onclick = () => document.getElementById('cartModal').classList.remove('translate-x-full');
-document.getElementById('floatingCartBtn').onclick = () => document.getElementById('cartModal').classList.remove('translate-x-full');
-document.getElementById('closeCartBtn').onclick = () => document.getElementById('cartModal').classList.add('translate-x-full');
+// ===== WIRING (No inline onclick) =====
+document.getElementById('viewCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.remove('translate-x-full'));
+document.getElementById('floatingCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.remove('translate-x-full'));
+document.getElementById('closeCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.add('translate-x-full'));
 
-document.getElementById('openFeedbackBtn').onclick = () => { document.getElementById('feedbackModal').classList.remove('hidden'); document.getElementById('feedbackModal').classList.add('flex'); };
-document.getElementById('closeFeedbackBtn').onclick = () => { document.getElementById('feedbackModal').classList.add('hidden'); document.getElementById('feedbackModal').classList.remove('flex'); };
+document.getElementById('openFeedbackBtn').addEventListener('click', () => { document.getElementById('feedbackModal').classList.remove('hidden'); document.getElementById('feedbackModal').classList.add('flex'); });
+document.getElementById('closeFeedbackBtn').addEventListener('click', () => { document.getElementById('feedbackModal').classList.add('hidden'); document.getElementById('feedbackModal').classList.remove('flex'); });
 
-document.getElementById('openAssistanceBtn').onclick = () => { document.getElementById('assistanceModal').classList.remove('hidden'); document.getElementById('assistanceModal').classList.add('flex'); };
-document.getElementById('closeAssistanceBtn').onclick = () => { document.getElementById('assistanceModal').classList.add('hidden'); document.getElementById('assistanceModal').classList.remove('flex'); };
+document.getElementById('openAssistanceBtn').addEventListener('click', () => { document.getElementById('assistanceModal').classList.remove('hidden'); document.getElementById('assistanceModal').classList.add('flex'); });
+document.getElementById('closeAssistanceBtn').addEventListener('click', () => { document.getElementById('assistanceModal').classList.add('hidden'); document.getElementById('assistanceModal').classList.remove('flex'); });
 
 let selectedRating = 0;
 document.querySelectorAll('.star-btn').forEach(btn => {
-  btn.onclick = () => {
+  btn.addEventListener('click', () => {
     selectedRating = parseInt(btn.dataset.rating);
     document.querySelectorAll('.star-btn').forEach(b => {
       b.classList.toggle('text-[#d4af37]', parseInt(b.dataset.rating) <= selectedRating);
       b.classList.toggle('text-gray-600', parseInt(b.dataset.rating) > selectedRating);
     });
-  };
+  });
 });
 
-document.getElementById('submitFeedbackBtn').onclick = function(){
+document.getElementById('submitFeedbackBtn').addEventListener('click', function(){
   const name = document.getElementById('feedbackName').value || 'Guest';
   const comment = document.getElementById('feedbackComment').value || '';
   const msg = `*Guest Feedback*\nRating: ${selectedRating || 'N/A'}/5\nName: ${name}\nComments: ${comment}`;
@@ -665,25 +714,25 @@ document.getElementById('submitFeedbackBtn').onclick = function(){
   notifyBackend('feedback', { name, rating: selectedRating || null, comment });
   document.getElementById('feedbackModal').classList.add('hidden');
   document.getElementById('feedbackModal').classList.remove('flex');
-};
+});
 
-document.getElementById('layoutGridBtn').onclick = function(){
+document.getElementById('layoutGridBtn').addEventListener('click', function(){
   layout = "grid";
   this.classList.add('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
   document.getElementById('layoutListBtn').classList.remove('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
   renderMenu();
-};
-document.getElementById('layoutListBtn').onclick = function(){
+});
+document.getElementById('layoutListBtn').addEventListener('click', function(){
   layout = "list";
   this.classList.add('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
   document.getElementById('layoutGridBtn').classList.remove('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
   renderMenu();
-};
+});
 
-document.getElementById('searchInput').oninput = renderMenu;
-document.getElementById('searchInputMobile').oninput = renderMenu;
+document.getElementById('searchInput').addEventListener('input', renderMenu);
+document.getElementById('searchInputMobile').addEventListener('input', renderMenu);
 
-document.getElementById('checkoutBtn').onclick = function(){
+document.getElementById('checkoutBtn').addEventListener('click', function(){
   if (cart.length === 0) return;
   const btn = this;
   const original = btn.innerHTML;
@@ -701,18 +750,20 @@ document.getElementById('checkoutBtn').onclick = function(){
       updateCartCount();
       document.getElementById('cartModal').classList.add('translate-x-full');
     } else {
-      openWhatsApp(msg); // will show the "not configured" toast
+      openWhatsApp(msg);
     }
     btn.innerHTML = original;
   }, 800);
-};
+});
 
+// Initialize
 loadCart();
 renderThali();
 renderTabs();
 renderTagFilters();
 renderMenu();
 updateCartCount();
+setupEventDelegation();
 </script>
 </body>
 </html>
