@@ -1409,8 +1409,18 @@ function renderCart() {
 }
 
 function sendAssistance(type) {
-  openWhatsApp("Assistance Needed: " + type);
-  notifyBackend("assistance", { request: type, table: tableNumber || null });
+  if (!tableNumber) {
+    document.getElementById("assistanceModal").classList.add("hidden");
+    document.getElementById("assistanceModal").classList.remove("flex");
+    document.getElementById("tableSetup").classList.remove("hidden");
+    document.getElementById("orderTypeEditRow").classList.add("hidden");
+    document.getElementById("tableRequiredHint").classList.remove("hidden");
+    document.getElementById("tableInput").focus();
+    showToast("Please enter your table number first.");
+    return;
+  }
+  openWhatsApp("Assistance Needed - Table " + tableNumber + ": " + type);
+  notifyBackend("assistance", { request: type, table: tableNumber });
   document.getElementById("assistanceModal").classList.add("hidden");
   document.getElementById("assistanceModal").classList.remove("flex");
 }
