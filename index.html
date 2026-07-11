@@ -3,88 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Golden Pine Restaurant - Interactive Menu</title>
+<title>Golden Pine Restaurant - Premium Interactive Menu</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body{font-family:'Montserrat',sans-serif;background:#0b1814;color:#faf8f5}
-  .font-luxury{font-family:'Cinzel',serif}
-  .no-scrollbar::-webkit-scrollbar{display:none}
-  .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
-  .gold-gradient-bg{background:linear-gradient(135deg,#132f25 0%,#0a1b15 100%)}
-  .gold-text-gradient{background:linear-gradient(135deg,#f3e5ab 0%,#d4af37 50%,#aa7c11 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .border-gold{border-color:rgba(212,175,55,.25)}
-  .shadow-luxury{box-shadow:0 10px 30px -10px rgba(0,0,0,.7)}
-  .menu-card{background:linear-gradient(180deg,#10221c 0%,#081510 100%);border:1px solid rgba(212,175,55,.15);transition:all .25s ease}
-  .menu-card:hover{border-color:rgba(212,175,55,.5);transform:translateY(-3px)}
-  .tab-btn{white-space:nowrap;flex-shrink:0}
-  .tab-active{background:#d4af37;color:#0f241d}
-  .tag-btn.tag-active{filter:brightness(1.15)}
-  @keyframes glow{0%,100%{filter:drop-shadow(0 0 4px rgba(212,175,55,.35))}50%{filter:drop-shadow(0 0 12px rgba(212,175,55,.7))}}
-  .logo-glow{animation:glow 4s infinite ease-in-out}
-  @keyframes fadeInUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-  .animate-entry{animation:fadeInUp .5s ease-out both}
-  @keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(212,175,55,.4)}70%{box-shadow:0 0 0 6px rgba(212,175,55,0)}100%{box-shadow:0 0 0 0 rgba(212,175,55,0)}}
-  .bell-pulse{animation:pulseRing 3.5s infinite ease-in-out}
-  @media (prefers-reduced-motion:reduce){.logo-glow,.animate-entry,.bell-pulse{animation:none}}
+  :root {
+    --bg-primary: #0b1814;
+    --bg-secondary: #0f241d;
+    --bg-card: #10221c;
+    --bg-hover: #143228;
+    --gold: #d4af37;
+    --gold-light: #ebd077;
+    --gold-dark: #aa7c11;
+    --text-primary: #faf8f5;
+    --text-secondary: #9ca3af;
+    --border-gold: rgba(212,175,55,.25);
+    --shadow-luxury: 0 10px 30px -10px rgba(0,0,0,.7);
+  }
+  [data-theme="light"] {
+    --bg-primary: #faf8f5;
+    --bg-secondary: #f5f0e8;
+    --bg-card: #ffffff;
+    --bg-hover: #f0ead9;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b7280;
+    --border-gold: rgba(212,175,55,.4);
+    --shadow-luxury: 0 10px 30px -10px rgba(0,0,0,.15);
+  }
+  body { font-family: 'Montserrat', sans-serif; background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s, color 0.3s; }
+  .font-luxury { font-family: 'Cinzel', serif; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .gold-gradient-bg { background: linear-gradient(135deg, #132f25 0%, #0a1b15 100%); }
+  [data-theme="light"] .gold-gradient-bg { background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d0 100%); }
+  .gold-text-gradient { background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 50%, #aa7c11 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .menu-card { background: linear-gradient(180deg, var(--bg-card) 0%, #081510 100%); border: 1px solid var(--border-gold); transition: all .25s ease; }
+  [data-theme="light"] .menu-card { background: var(--bg-card); border: 1px solid var(--border-gold); }
+  .menu-card:hover { border-color: rgba(212,175,55,.5); transform: translateY(-3px); }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; }
+  .tab-active { background: var(--gold); color: #0f241d; }
+  @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 4px rgba(212,175,55,.35)); } 50% { filter: drop-shadow(0 0 12px rgba(212,175,55,.7)); } }
+  .logo-glow { animation: glow 4s infinite ease-in-out; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-entry { animation: fadeInUp .5s ease-out both; }
+  @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(212,175,55,.4); } 70% { box-shadow: 0 0 0 6px rgba(212,175,55,0); } 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); } }
+  .bell-pulse { animation: pulseRing 3.5s infinite ease-in-out; }
+  .spice-bar { height: 4px; border-radius: 2px; background: #333; overflow: hidden; }
+  .spice-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+  .timeline-step { position: relative; padding-left: 30px; }
+  .timeline-step::before { content: ''; position: absolute; left: 8px; top: 24px; bottom: -8px; width: 2px; background: #333; }
+  .timeline-step:last-child::before { display: none; }
+  .timeline-dot { position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--gold); background: var(--bg-primary); }
+  .timeline-dot.active { background: var(--gold); box-shadow: 0 0 8px rgba(212,175,55,.5); }
+  .offline-banner { background: #dc2626; color: white; text-align: center; padding: 8px; font-size: 12px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: none; }
+  @keyframes voicePulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } }
+  .voice-active { animation: voicePulse 1s infinite; }
+  @media (prefers-reduced-motion: reduce) { .logo-glow, .animate-entry, .bell-pulse, .voice-active { animation: none; } }
 </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased">
+<body class="min-h-screen flex flex-col antialiased" data-theme="dark">
 
-<header class="sticky top-0 z-50 bg-[#0f241d]/95 backdrop-blur-md border-b border-[#d4af37]/20 shadow-lg">
+<div id="offlineBanner" class="offline-banner"><i class="fa fa-wifi-slash mr-2"></i>Offline mode. Menu cached.</div>
+
+<button id="adminToggle" class="fixed top-20 right-4 z-50 bg-red-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider opacity-0 hover:opacity-100 transition-opacity"><i class="fa fa-lock mr-1"></i>Admin</button>
+
+<header class="sticky top-0 z-50 bg-[var(--bg-secondary)]/95 backdrop-blur-md border-b border-[var(--border-gold)] shadow-lg">
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
     <div class="flex items-center space-x-3 min-w-0">
       <div class="w-10 h-10 flex-shrink-0 relative flex items-center justify-center bg-black/40 rounded-full overflow-hidden">
-        <svg viewBox="0 0 100 100" class="w-6 h-6 text-[#d4af37]" fill="currentColor"><path d="M50 5L30 35H45L25 55H42L15 80H45V92H55V80H85L58 55H75L55 35H70L50 5Z"/></svg>
+        <svg viewBox="0 0 100 100" class="w-6 h-6 text-[var(--gold)]" fill="currentColor"><path d="M50 5L30 35H45L25 55H42L15 80H45V92H55V80H85L58 55H75L55 35H70L50 5Z"/></svg>
       </div>
       <div class="truncate">
         <h1 class="font-luxury text-sm md:text-lg font-bold tracking-widest gold-text-gradient leading-none">GOLDEN PINE</h1>
-        <span class="text-[9px] uppercase tracking-[0.25em] text-gray-400 block mt-0.5">R e s t a u r a n t</span>
+        <span class="text-[9px] uppercase tracking-[0.25em] text-gray-400 block mt-0.5" data-i18n="restaurant">Restaurant</span>
       </div>
     </div>
     <div class="flex items-center space-x-2">
+      <select id="langSelect" class="bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-2 py-1.5 rounded-full border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)]">
+        <option value="en">EN</option>
+        <option value="hi">HI</option>
+        <option value="bn">BN</option>
+      </select>
+      <button id="themeToggle" class="border border-[var(--border-gold)] text-[var(--gold)] w-8 h-8 rounded-full text-xs hover:bg-[var(--gold)]/10 flex items-center justify-center" title="Toggle Theme"><i class="fa fa-sun" id="themeIcon"></i></button>
+      <button id="voiceSearchBtn" class="border border-[var(--border-gold)] text-[var(--gold)] w-8 h-8 rounded-full text-xs hover:bg-[var(--gold)]/10 flex items-center justify-center" title="Voice Search"><i class="fa fa-microphone"></i></button>
       <div class="relative hidden sm:block">
-        <input id="searchInput" type="text" placeholder="Search dish..." class="bg-[#143228] text-xs text-white pl-8 pr-3 py-1.5 rounded-full border border-[#d4af37]/30 focus:outline-none focus:border-[#d4af37] w-40 md:w-52 transition-all">
-        <i class="fa fa-search absolute left-3 top-2.5 text-[#d4af37]/60 text-[10px]"></i>
+        <input id="searchInput" type="text" placeholder="Search dish..." class="bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] pl-8 pr-3 py-1.5 rounded-full border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)] w-40 md:w-52 transition-all" data-i18n-placeholder="search">
+        <i class="fa fa-search absolute left-3 top-2.5 text-[var(--gold)]/60 text-[10px]"></i>
       </div>
-      <button id="openAssistanceBtn" class="border border-[#d4af37]/40 text-[#d4af37] w-8 h-8 rounded-full text-xs hover:bg-[#d4af37]/10 flex items-center justify-center bell-pulse" title="Need assistance?">
-        <i class="fa-solid fa-bell"></i>
-      </button>
-      <button id="openFeedbackBtn" class="border border-[#d4af37]/40 text-[#d4af37] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-[#d4af37]/10 transition-all hidden md:flex items-center space-x-1.5">
-        <i class="fa-regular fa-comment-dots"></i><span>Feedback</span>
-      </button>
-      <button id="viewCartBtn" class="bg-[#d4af37] text-[#0f241d] px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-[#ebd077] transition-all flex items-center space-x-1 shadow-md">
-        <i class="fa-solid fa-leaf"></i><span class="hidden md:inline">Basket</span>
-        <span id="cartCount" class="bg-[#0f241d] text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center ml-1">0</span>
-      </button>
+      <button id="openAssistanceBtn" class="border border-[var(--border-gold)] text-[var(--gold)] w-8 h-8 rounded-full text-xs hover:bg-[var(--gold)]/10 flex items-center justify-center bell-pulse" title="Need assistance?"><i class="fa-solid fa-bell"></i></button>
+      <button id="openFeedbackBtn" class="border border-[var(--border-gold)] text-[var(--gold)] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-[var(--gold)]/10 transition-all hidden md:flex items-center space-x-1.5"><i class="fa-regular fa-comment-dots"></i><span data-i18n="feedback">Feedback</span></button>
+      <button id="viewCartBtn" class="bg-[var(--gold)] text-[#0f241d] px-3.5 py-1.5 rounded-full text-xs font-bold hover:bg-[var(--gold-light)] transition-all flex items-center space-x-1 shadow-md"><i class="fa-solid fa-leaf"></i><span class="hidden md:inline" data-i18n="basket">Basket</span><span id="cartCount" class="bg-[#0f241d] text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center ml-1">0</span></button>
     </div>
   </div>
   <div class="sm:hidden px-4 pb-3">
     <div class="relative">
-      <input id="searchInputMobile" type="text" placeholder="Search dish..." class="bg-[#143228] text-xs text-white pl-8 pr-3 py-2 rounded-full border border-[#d4af37]/30 focus:outline-none focus:border-[#d4af37] w-full">
-      <i class="fa fa-search absolute left-3 top-2.5 text-[#d4af37]/60 text-[10px]"></i>
+      <input id="searchInputMobile" type="text" placeholder="Search dish..." class="bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] pl-8 pr-3 py-2 rounded-full border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)] w-full" data-i18n-placeholder="search">
+      <i class="fa fa-search absolute left-3 top-2.5 text-[var(--gold)]/60 text-[10px]"></i>
     </div>
   </div>
 </header>
 
-<section class="relative bg-cover bg-center py-10 md:py-16 text-center border-b border-[#d4af37]/20" style="background-image:linear-gradient(rgba(15,36,29,.88),rgba(11,24,20,.96)),url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200')">
+<section class="relative bg-cover bg-center py-10 md:py-16 text-center border-b border-[var(--border-gold)]" style="background-image:linear-gradient(rgba(15,36,29,.88),rgba(11,24,20,.96)),url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200')">
   <div class="max-w-3xl mx-auto px-4">
     <h2 class="font-luxury text-3xl md:text-5xl font-extrabold gold-text-gradient tracking-widest">GOLDEN PINE</h2>
-    <p class="text-[#d4af37] uppercase tracking-[0.4em] text-xs mt-3 font-light">Fine Dining &amp; Authentic Cuisines</p>
+    <p class="text-[var(--gold)] uppercase tracking-[0.4em] text-xs mt-3 font-light" data-i18n="tagline">Fine Dining & Authentic Cuisines</p>
     <div class="flex flex-wrap items-center justify-center gap-4 mt-5 text-xs text-gray-300">
-      <span class="flex items-center"><i class="fa fa-clock text-[#d4af37] mr-1.5"></i>08:00 AM - 10:30 PM</span>
-      <span class="text-[#d4af37] hidden sm:inline">|</span>
-      <span class="flex items-center"><i class="fa fa-utensils text-[#d4af37] mr-1.5"></i>Multi-Cuisine</span>
-      <span class="text-[#d4af37] hidden sm:inline">|</span>
-      <span class="flex items-center"><i class="fa fa-shield-halved text-[#d4af37] mr-1.5"></i>Hygiene First</span>
+      <span class="flex items-center"><i class="fa fa-clock text-[var(--gold)] mr-1.5"></i>08:00 AM - 10:30 PM</span>
+      <span class="text-[var(--gold)] hidden sm:inline">|</span>
+      <span class="flex items-center"><i class="fa fa-utensils text-[var(--gold)] mr-1.5"></i><span data-i18n="multiCuisine">Multi-Cuisine</span></span>
+      <span class="text-[var(--gold)] hidden sm:inline">|</span>
+      <span class="flex items-center"><i class="fa fa-shield-halved text-[var(--gold)] mr-1.5"></i><span data-i18n="hygiene">Hygiene First</span></span>
     </div>
   </div>
 </section>
 
-<nav class="sticky top-[61px] sm:top-[61px] z-40 bg-[#0b1814] border-b border-[#d4af37]/15 py-3 shadow-md">
+<div id="tableBanner" class="bg-[var(--gold)]/10 border-b border-[var(--border-gold)] py-2 px-4 text-center hidden">
+  <span class="text-xs text-[var(--gold)] font-semibold"><i class="fa fa-chair mr-1"></i><span data-i18n="table">Table</span>: <span id="tableDisplay">--</span> | <span data-i18n="guests">Guests</span>: <span id="guestDisplay">--</span></span>
+</div>
+
+<nav class="sticky top-[61px] sm:top-[61px] z-40 bg-[var(--bg-primary)] border-b border-[var(--border-gold)] py-3 shadow-md">
   <div id="categoryTabs" class="max-w-7xl mx-auto px-4 flex space-x-2.5 overflow-x-auto no-scrollbar scroll-smooth"></div>
 </nav>
 
@@ -92,371 +132,572 @@
   <div id="tagFilters" class="flex flex-wrap justify-center gap-2"></div>
 </div>
 
-<main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+<div id="pricingBanner" class="max-w-7xl mx-auto px-4 mt-3 hidden">
+  <div class="bg-gradient-to-r from-green-900/50 to-emerald-900/50 border border-green-500/30 rounded-lg p-2 text-center">
+    <span class="text-[10px] text-green-400 font-semibold uppercase tracking-wider"><i class="fa fa-clock mr-1"></i><span data-i18n="happyHour">Happy Hour</span>: 20% OFF | <span data-i18n="endsIn">Ends in</span> <span id="countdownTimer">45:00</span></span>
+  </div>
+</div>
 
+<main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
   <aside class="space-y-6 lg:col-span-1">
-    <div class="gold-gradient-bg p-5 rounded-2xl border border-[#d4af37]/40 shadow-luxury relative overflow-hidden">
+    <div class="gold-gradient-bg p-5 rounded-2xl border border-[var(--border-gold)] shadow-[var(--shadow-luxury)] relative overflow-hidden">
       <div class="flex items-center space-x-2 mb-3">
-        <i class="fa fa-crown text-[#d4af37] text-lg"></i>
-        <span class="text-[10px] uppercase tracking-widest text-[#d4af37] font-semibold">Chef's Signature Platters</span>
+        <i class="fa fa-crown text-[var(--gold)] text-lg"></i>
+        <span class="text-[10px] uppercase tracking-widest text-[var(--gold)] font-semibold" data-i18n="chefSignature">Chef's Signature Platters</span>
       </div>
-      <h3 class="font-luxury text-xl font-bold text-white mb-2">Traditional Thalis</h3>
-      <p class="text-xs text-gray-400 mb-4 leading-relaxed">Complete traditional meals featuring premium dishes. Rice &amp; Dal are unlimited within thali package!</p>
+      <h3 class="font-luxury text-xl font-bold text-[var(--text-primary)] mb-2" data-i18n="traditionalThalis">Traditional Thalis</h3>
+      <p class="text-xs text-gray-400 mb-4 leading-relaxed" data-i18n="thaliDesc">Complete traditional meals featuring premium dishes. Rice & Dal are unlimited within thali package!</p>
       <div id="thaliList" class="space-y-3"></div>
-      <div class="mt-4 pt-3 border-t border-[#d4af37]/20 text-center">
-        <span class="text-[9px] text-[#dfba6b] uppercase tracking-widest"><i class="fa fa-info-circle mr-1"></i>Rice &amp; Dal are unlimited</span>
+      <div class="mt-4 pt-3 border-t border-[var(--border-gold)] text-center">
+        <span class="text-[9px] text-[#dfba6b] uppercase tracking-widest"><i class="fa fa-info-circle mr-1"></i><span data-i18n="unlimited">Rice & Dal are unlimited</span></span>
       </div>
     </div>
-    <div class="bg-[#10221c] p-4 rounded-xl border border-[#d4af37]/10 text-xs text-gray-300">
-      <h4 class="font-bold text-[#d4af37] mb-2 uppercase tracking-wider"><i class="fa fa-box mr-1.5"></i>Packaging Guidelines</h4>
-      <p class="leading-relaxed">A standardized premium packaging fee of <strong class="text-white">₹20/- per item</strong> applies to takeaway and delivery orders.</p>
+    <div class="bg-[var(--bg-card)] p-4 rounded-xl border border-[var(--border-gold)] text-xs text-gray-300">
+      <h4 class="font-bold text-[var(--gold)] mb-2 uppercase tracking-wider"><i class="fa fa-box mr-1.5"></i><span data-i18n="packaging">Packaging Guidelines</span></h4>
+      <p class="leading-relaxed" data-i18n="packagingDesc">A standardized premium packaging fee of <strong class="text-[var(--text-primary)]">Rs.20/- per item</strong> applies to takeaway and delivery orders.</p>
     </div>
-    <a href="https://share.google/bnRgm1v1iRoVeLW3i" target="_blank" class="flex items-center justify-center space-x-2 bg-[#10221c] p-3 rounded-xl border border-[#d4af37]/10 text-xs text-[#d4af37] hover:bg-[#d4af37]/10 transition-all">
-      <i class="fa-brands fa-google"></i><span class="uppercase tracking-widest text-[10px]">Leave us a Google review</span>
+    <div class="bg-[var(--bg-card)] p-4 rounded-xl border border-[var(--border-gold)]">
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="font-bold text-[var(--gold)] text-xs uppercase tracking-wider"><i class="fa fa-heart-pulse mr-1.5"></i><span data-i18n="nutrition">Nutrition Info</span></h4>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="nutritionToggle" class="sr-only peer">
+          <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--gold)]"></div>
+        </label>
+      </div>
+      <p class="text-[10px] text-gray-400" data-i18n="nutritionDesc">Toggle to show calories & protein per dish</p>
+    </div>
+    <a href="https://share.google/bnRgm1v1iRoVeLW3i" target="_blank" class="flex items-center justify-center space-x-2 bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-gold)] text-xs text-[var(--gold)] hover:bg-[var(--gold)]/10 transition-all">
+      <i class="fa-brands fa-google"></i><span class="uppercase tracking-widest text-[10px]" data-i18n="googleReview">Leave us a Google review</span>
     </a>
   </aside>
 
   <section class="lg:col-span-3 space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#d4af37]/30 pb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-gold)] pb-4">
       <div>
         <h2 id="currentCategoryTitle" class="font-luxury text-2xl md:text-3xl font-bold tracking-wider gold-text-gradient uppercase">Breakfast</h2>
-        <p class="text-xs text-gray-400 mt-1">Savor our wide selection of freshly made dishes.</p>
+        <p class="text-xs text-gray-400 mt-1" data-i18n="savor">Savor our wide selection of freshly made dishes.</p>
       </div>
       <div class="flex items-center space-x-2 self-start sm:self-auto">
-        <button id="layoutGridBtn" class="p-2 bg-[#132f25] text-[#d4af37] rounded-lg text-sm border border-[#d4af37]/25" title="Grid Layout"><i class="fa fa-th-large"></i></button>
-        <button id="layoutListBtn" class="p-2 bg-[#0d211a] text-gray-400 rounded-lg text-sm border border-[#d4af37]/10" title="List Layout"><i class="fa fa-bars"></i></button>
+        <button id="layoutGridBtn" class="p-2 bg-[var(--bg-hover)] text-[var(--gold)] rounded-lg text-sm border border-[var(--border-gold)]" title="Grid Layout"><i class="fa fa-th-large"></i></button>
+        <button id="layoutListBtn" class="p-2 bg-[var(--bg-primary)] text-gray-400 rounded-lg text-sm border border-[var(--border-gold)]" title="List Layout"><i class="fa fa-bars"></i></button>
       </div>
     </div>
-    <div id="noResults" class="hidden text-center py-16 bg-[#0f241d]/50 rounded-2xl border border-[#d4af37]/10">
-      <i class="fa fa-magnifying-glass text-4xl text-[#d4af37]/40 mb-3"></i>
-      <h3 class="text-lg font-semibold text-white">No matches found</h3>
-      <p class="text-xs text-gray-400 mt-1">Refine your search or select a different category.</p>
+    <div id="noResults" class="hidden text-center py-16 bg-[var(--bg-secondary)]/50 rounded-2xl border border-[var(--border-gold)]">
+      <i class="fa fa-magnifying-glass text-4xl text-[var(--gold)]/40 mb-3"></i>
+      <h3 class="text-lg font-semibold text-[var(--text-primary)]" data-i18n="noMatches">No matches found</h3>
+      <p class="text-xs text-gray-400 mt-1" data-i18n="refine">Refine your search or select a different category.</p>
     </div>
     <div id="menuItemsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-300"></div>
   </section>
 </main>
 
-<!-- Cart -->
-<div id="cartModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex justify-end transform translate-x-full transition-transform duration-300">
-  <div class="w-full max-w-md bg-[#0f241d] h-full flex flex-col shadow-2xl border-l border-[#d4af37]/30">
-    <div class="p-4 border-b border-[#d4af37]/20 flex items-center justify-between gold-gradient-bg">
-      <div class="flex items-center space-x-2"><i class="fa-solid fa-seedling text-[#d4af37] text-lg"></i><h3 class="font-luxury text-lg font-bold text-white">Review Order</h3></div>
-      <button id="closeCartBtn" class="text-gray-400 hover:text-white p-1"><i class="fa fa-times text-xl"></i></button>
+<!-- Dish Detail Modal -->
+<div id="dishModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-[70] hidden items-center justify-center p-4">
+  <div class="w-full max-w-lg bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-gold)] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div class="relative h-48 bg-gradient-to-b from-[var(--bg-card)] to-[var(--bg-primary)] flex items-center justify-center">
+      <i class="fa fa-utensils text-6xl text-[var(--gold)]/30"></i>
+      <button id="closeDishModal" class="absolute top-3 right-3 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/70"><i class="fa fa-times"></i></button>
+      <div class="absolute bottom-3 left-3">
+        <span id="dishModalPrepTime" class="text-[10px] bg-black/60 text-white px-2 py-1 rounded-full"><i class="fa fa-clock mr-1"></i>12 min</span>
+      </div>
     </div>
-    <div id="cartItemsList" class="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar"></div>
-    <div class="p-4 bg-[#0a1814] border-t border-[#d4af37]/20 space-y-2.5">
-      <div class="mb-3">
-        <label class="block text-[11px] uppercase tracking-widest text-[#d4af37] font-bold mb-1"><i class="fa-solid fa-chair mr-1"></i>Table / Service Type</label>
-        <input id="tableNumberInput" type="text" placeholder="e.g., Table 4, or Takeaway" class="w-full bg-[#143228] text-xs text-white px-3 py-2 rounded-lg border border-[#d4af37]/20 focus:outline-none focus:border-[#d4af37] placeholder-gray-500">
+    <div class="p-6 overflow-y-auto">
+      <div class="flex justify-between items-start gap-3">
+        <h3 id="dishModalName" class="font-luxury text-xl font-bold text-[var(--text-primary)]">Dish Name</h3>
+        <span id="dishModalPrice" class="text-[var(--gold)] font-bold text-lg whitespace-nowrap">Rs.0</span>
       </div>
-      <div class="mb-3">
-        <label class="block text-[11px] uppercase tracking-widest text-[#d4af37] font-bold mb-1"><i class="fa-solid fa-note-sticky mr-1"></i>Special Instructions</label>
-        <textarea id="specialRequest" rows="2" placeholder="Less spicy, no onion, etc." class="w-full bg-[#143228] text-xs text-white px-3 py-2 rounded-lg border border-[#d4af37]/20 focus:outline-none focus:border-[#d4af37] placeholder-gray-500 resize-none"></textarea>
+      <div id="dishModalTags" class="flex flex-wrap gap-1.5 mt-2"></div>
+      <div class="mt-4 bg-[var(--bg-card)] p-3 rounded-lg border border-[var(--border-gold)]">
+        <p class="text-[10px] text-[var(--gold)] uppercase tracking-wider font-bold mb-1"><i class="fa fa-quote-left mr-1"></i><span data-i18n="chefNote">Chef's Note</span></p>
+        <p id="dishModalNote" class="text-xs text-gray-300 italic">A traditional preparation passed down through generations...</p>
       </div>
-      <div class="flex justify-between text-xs text-gray-400"><span>Subtotal</span><span id="subtotalPrice">₹0</span></div>
-      <div class="flex justify-between text-xs text-gray-400"><span>Packaging Surcharge (₹20/item)</span><span id="packCharge">₹0</span></div>
-      <div class="flex justify-between text-sm font-bold text-white pt-2.5 border-t border-dashed border-[#d4af37]/20"><span>Total</span><span class="text-[#d4af37]" id="grandTotalPrice">₹0</span></div>
-      <button id="checkoutBtn" class="w-full bg-[#d4af37] hover:bg-[#ebd077] text-[#0f241d] py-3.5 rounded-lg font-bold mt-4 tracking-widest text-xs uppercase shadow-lg transition-all flex items-center justify-center space-x-2">
-        <i class="fa-solid fa-paper-plane"></i><span>Send Order to WhatsApp</span>
+      <div class="mt-4">
+        <div class="flex justify-between items-center mb-1">
+          <span class="text-[10px] text-gray-400 uppercase tracking-wider" data-i18n="spiceLevel">Spice Level</span>
+          <span id="spiceLabel" class="text-[10px] text-[var(--gold)] font-bold">Medium</span>
+        </div>
+        <div class="spice-bar"><div id="spiceFill" class="spice-fill bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600" style="width: 50%"></div></div>
+      </div>
+      <div id="dishModalNutrition" class="mt-4 hidden">
+        <div class="grid grid-cols-3 gap-2">
+          <div class="bg-[var(--bg-card)] p-2 rounded-lg text-center border border-[var(--border-gold)]">
+            <span id="dishCalories" class="text-sm font-bold text-[var(--text-primary)]">0</span><span class="text-[9px] text-gray-400 block">kcal</span>
+          </div>
+          <div class="bg-[var(--bg-card)] p-2 rounded-lg text-center border border-[var(--border-gold)]">
+            <span id="dishProtein" class="text-sm font-bold text-[var(--text-primary)]">0g</span><span class="text-[9px] text-gray-400 block">Protein</span>
+          </div>
+          <div class="bg-[var(--bg-card)] p-2 rounded-lg text-center border border-[var(--border-gold)]">
+            <span id="dishPrepTime" class="text-sm font-bold text-[var(--text-primary)]">12m</span><span class="text-[9px] text-gray-400 block">Prep Time</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <span class="text-[10px] text-gray-400 uppercase tracking-wider block mb-2" data-i18n="portionSize">Portion Size</span>
+        <div class="flex gap-2">
+          <button data-portion="half" class="portion-btn flex-1 py-2 bg-[var(--bg-card)] border border-[var(--border-gold)] rounded-lg text-xs text-[var(--text-primary)] hover:border-[var(--gold)] transition-all"><span class="block font-bold">Half</span><span class="text-[10px] text-gray-400">60% price</span></button>
+          <button data-portion="full" class="portion-btn flex-1 py-2 bg-[var(--gold)]/20 border border-[var(--gold)] rounded-lg text-xs text-[var(--text-primary)]"><span class="block font-bold">Full</span><span class="text-[10px] text-gray-400">Standard</span></button>
+          <button data-portion="family" class="portion-btn flex-1 py-2 bg-[var(--bg-card)] border border-[var(--border-gold)] rounded-lg text-xs text-[var(--text-primary)] hover:border-[var(--gold)] transition-all"><span class="block font-bold">Family</span><span class="text-[10px] text-gray-400">2.5x price</span></button>
+        </div>
+      </div>
+      <div class="mt-4">
+        <span class="text-[10px] text-gray-400 uppercase tracking-wider block mb-2" data-i18n="customizeSpice">Customize Spice</span>
+        <input type="range" id="spiceSlider" min="0" max="100" value="50" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-[var(--gold)]">
+        <div class="flex justify-between text-[9px] text-gray-500 mt-1">
+          <span data-i18n="mild">Mild</span><span data-i18n="medium">Medium</span><span data-i18n="hot">Hot</span><span data-i18n="extraHot">Extra Hot</span>
+        </div>
+      </div>
+      <div class="mt-4">
+        <textarea id="dishSpecialRequest" rows="2" placeholder="Less spicy, no onion, extra gravy..." class="w-full bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-3 py-2 rounded-lg border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)] placeholder-gray-500 resize-none" data-i18n-placeholder="specialReq"></textarea>
+      </div>
+      <button id="addDishToCart" class="w-full mt-4 bg-[var(--gold)] hover:bg-[var(--gold-light)] text-[#0f241d] py-3 rounded-lg font-bold tracking-widest text-xs uppercase shadow-lg transition-all flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-plus"></i><span data-i18n="addToOrder">Add to Order</span>
       </button>
     </div>
   </div>
 </div>
 
-<!-- Feedback -->
+<!-- Cart Modal -->
+<div id="cartModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex justify-end transform translate-x-full transition-transform duration-300">
+  <div class="w-full max-w-md bg-[var(--bg-secondary)] h-full flex flex-col shadow-2xl border-l border-[var(--border-gold)]">
+    <div class="p-4 border-b border-[var(--border-gold)] flex items-center justify-between gold-gradient-bg">
+      <div class="flex items-center space-x-2"><i class="fa-solid fa-seedling text-[var(--gold)] text-lg"></i><h3 class="font-luxury text-lg font-bold text-[var(--text-primary)]" data-i18n="reviewOrder">Review Order</h3></div>
+      <button id="closeCartBtn" class="text-gray-400 hover:text-white p-1"><i class="fa fa-times text-xl"></i></button>
+    </div>
+    <div id="tableSetup" class="p-4 bg-[var(--bg-card)] border-b border-[var(--border-gold)]">
+      <p class="text-xs text-gray-400 mb-2" data-i18n="tableSetup">Enter your table details:</p>
+      <div class="flex gap-2">
+        <input id="tableInput" type="text" placeholder="Table #" class="flex-1 bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-3 py-2 rounded-lg border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)]">
+        <input id="guestInput" type="number" placeholder="Guests" min="1" max="20" class="w-20 bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-3 py-2 rounded-lg border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)]">
+        <button id="saveTableBtn" class="bg-[var(--gold)] text-[#0f241d] px-3 py-2 rounded-lg text-xs font-bold"><i class="fa fa-check"></i></button>
+      </div>
+    </div>
+    <div id="cartItemsList" class="flex-grow overflow-y-auto p-4 space-y-4 no-scrollbar"></div>
+    <div id="splitBillSection" class="px-4 pb-2 hidden">
+      <button id="toggleSplitBill" class="text-[10px] text-[var(--gold)] uppercase tracking-wider font-bold flex items-center gap-1"><i class="fa fa-users"></i><span data-i18n="splitBill">Split Bill</span></button>
+      <div id="splitBillPanel" class="hidden mt-2 space-y-2 max-h-32 overflow-y-auto no-scrollbar"></div>
+    </div>
+    <div class="p-4 bg-[#0a1814] border-t border-[var(--border-gold)] space-y-2.5">
+      <div class="mb-3">
+        <label class="block text-[11px] uppercase tracking-widest text-[var(--gold)] font-bold mb-1"><i class="fa-solid fa-note-sticky mr-1"></i><span data-i18n="specialInstructions">Special Instructions</span></label>
+        <textarea id="specialRequest" rows="2" placeholder="Less spicy, no onion, etc." class="w-full bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-3 py-2 rounded-lg border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)] placeholder-gray-500 resize-none" data-i18n-placeholder="specialReq"></textarea>
+      </div>
+      <div id="orderTrackingPreview" class="hidden mb-3 p-3 bg-[var(--bg-card)] rounded-lg border border-[var(--border-gold)]">
+        <p class="text-[10px] text-[var(--gold)] uppercase tracking-wider font-bold mb-2" data-i18n="orderStatus">Order Status</p>
+        <div class="timeline-step"><div class="timeline-dot active"></div><p class="text-[10px] text-[var(--text-primary)] font-semibold" data-i18n="received">Order Received</p><p class="text-[9px] text-gray-400">Just now</p></div>
+        <div class="timeline-step"><div class="timeline-dot"></div><p class="text-[10px] text-gray-400" data-i18n="preparing">Preparing</p></div>
+        <div class="timeline-step"><div class="timeline-dot"></div><p class="text-[10px] text-gray-400" data-i18n="ready">Ready for Pickup</p></div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-400"><span data-i18n="subtotal">Subtotal</span><span id="subtotalPrice">Rs.0</span></div>
+      <div class="flex justify-between text-xs text-gray-400"><span data-i18n="packaging">Packaging Surcharge (Rs.20/item)</span><span id="packCharge">Rs.0</span></div>
+      <div id="discountRow" class="hidden flex justify-between text-xs text-green-400"><span data-i18n="discount">Happy Hour Discount (20%)</span><span id="discountAmount">-Rs.0</span></div>
+      <div class="flex justify-between text-sm font-bold text-[var(--text-primary)] pt-2.5 border-t border-dashed border-[var(--border-gold)]"><span data-i18n="total">Total</span><span class="text-[var(--gold)]" id="grandTotalPrice">Rs.0</span></div>
+      <button id="checkoutBtn" class="w-full bg-[var(--gold)] hover:bg-[var(--gold-light)] text-[#0f241d] py-3.5 rounded-lg font-bold mt-4 tracking-widest text-xs uppercase shadow-lg transition-all flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-paper-plane"></i><span data-i18n="sendOrder">Send Order to WhatsApp</span>
+      </button>
+      <button id="payNowBtn" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-bold tracking-widest text-xs uppercase shadow-lg transition-all flex items-center justify-center space-x-2 hidden">
+        <i class="fa-solid fa-credit-card"></i><span data-i18n="payNow">Pay Now</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
 <div id="feedbackModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-  <div class="w-full max-w-md bg-[#0f241d] rounded-2xl border border-[#d4af37]/30 shadow-2xl overflow-hidden flex flex-col">
-    <div class="p-4 border-b border-[#d4af37]/20 flex items-center justify-between gold-gradient-bg">
-      <div class="flex items-center space-x-2"><i class="fa-solid fa-star text-[#d4af37]"></i><h3 class="font-luxury text-base font-bold text-white">Guest Impressions</h3></div>
+  <div class="w-full max-w-md bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-gold)] shadow-2xl overflow-hidden flex flex-col">
+    <div class="p-4 border-b border-[var(--border-gold)] flex items-center justify-between gold-gradient-bg">
+      <div class="flex items-center space-x-2"><i class="fa-solid fa-star text-[var(--gold)]"></i><h3 class="font-luxury text-base font-bold text-[var(--text-primary)]" data-i18n="guestImpressions">Guest Impressions</h3></div>
       <button id="closeFeedbackBtn" class="text-gray-400 hover:text-white p-1"><i class="fa fa-times text-lg"></i></button>
     </div>
     <div class="p-6 space-y-4">
       <div class="text-center">
-        <p class="text-xs text-gray-300 mb-2">Rate your hospitality experience today:</p>
+        <p class="text-xs text-gray-300 mb-2" data-i18n="rateExperience">Rate your hospitality experience today:</p>
         <div class="flex justify-center space-x-2.5 text-2xl" id="starRatingContainer">
-          <button class="star-btn text-gray-600 hover:text-[#d4af37]" data-rating="1"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn text-gray-600 hover:text-[#d4af37]" data-rating="2"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn text-gray-600 hover:text-[#d4af37]" data-rating="3"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn text-gray-600 hover:text-[#d4af37]" data-rating="4"><i class="fa-solid fa-star"></i></button>
-          <button class="star-btn text-gray-600 hover:text-[#d4af37]" data-rating="5"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn text-gray-600 hover:text-[var(--gold)]" data-rating="1"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn text-gray-600 hover:text-[var(--gold)]" data-rating="2"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn text-gray-600 hover:text-[var(--gold)]" data-rating="3"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn text-gray-600 hover:text-[var(--gold)]" data-rating="4"><i class="fa-solid fa-star"></i></button>
+          <button class="star-btn text-gray-600 hover:text-[var(--gold)]" data-rating="5"><i class="fa-solid fa-star"></i></button>
         </div>
       </div>
-      <div><label class="block text-[11px] uppercase tracking-widest text-[#d4af37] font-bold mb-1">Your Name</label>
-        <input id="feedbackName" type="text" placeholder="Enter guest name" class="w-full bg-[#143228] text-xs text-white px-3 py-2 rounded-lg border border-[#d4af37]/20 focus:outline-none focus:border-[#d4af37] placeholder-gray-500"></div>
-      <div><label class="block text-[11px] uppercase tracking-widest text-[#d4af37] font-bold mb-1">Observations &amp; Notes</label>
-        <textarea id="feedbackComment" rows="3" placeholder="Share your feedback..." class="w-full bg-[#143228] text-xs text-white px-3 py-2 rounded-lg border border-[#d4af37]/20 focus:outline-none focus:border-[#d4af37] placeholder-gray-500 resize-none"></textarea></div>
-      <button id="submitFeedbackBtn" class="w-full bg-[#d4af37] hover:bg-[#ebd077] text-[#0f241d] py-3 rounded-lg font-bold tracking-widest text-xs uppercase shadow-lg flex items-center justify-center space-x-2">
-        <i class="fa-solid fa-paper-plane"></i><span>Submit Evaluation</span>
+      <div><label class="block text-[11px] uppercase tracking-widest text-[var(--gold)] font-bold mb-1" data-i18n="yourName">Your Name</label>
+        <input id="feedbackName" type="text" placeholder="Enter guest name" class="w-full bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-3 py-2 rounded-lg border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)] placeholder-gray-500"></div>
+      <div><label class="block text-[11px] uppercase tracking-widest text-[var(--gold)] font-bold mb-1" data-i18n="observations">Observations & Notes</label>
+        <textarea id="feedbackComment" rows="3" placeholder="Share your feedback..." class="w-full bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-3 py-2 rounded-lg border border-[var(--border-gold)] focus:outline-none focus:border-[var(--gold)] placeholder-gray-500 resize-none"></textarea></div>
+      <button id="submitFeedbackBtn" class="w-full bg-[var(--gold)] hover:bg-[var(--gold-light)] text-[#0f241d] py-3 rounded-lg font-bold tracking-widest text-xs uppercase shadow-lg flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-paper-plane"></i><span data-i18n="submitEvaluation">Submit Evaluation</span>
       </button>
     </div>
   </div>
 </div>
 
-<!-- Assistance -->
+<!-- Assistance Modal -->
 <div id="assistanceModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
   <div class="w-full max-w-sm bg-[#faf8f5] rounded-3xl p-6 text-center">
-    <h3 class="text-xl font-bold text-[#0f241d] mb-4">Assistance Required?</h3>
+    <h3 class="text-xl font-bold text-[#0f241d] mb-4" data-i18n="assistanceRequired">Assistance Required?</h3>
     <div class="space-y-3">
-      <button data-assist="Call server to take custom query" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">🙋 Call Server</button>
-      <button data-assist="Bring fresh drinking water" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💧 Bring Water</button>
-      <button data-assist="Request Physical Bill" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💳 Request Bill</button>
+      <button data-assist="Call server to take custom query" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">🙋 <span data-i18n="callServer">Call Server</span></button>
+      <button data-assist="Bring fresh drinking water" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💧 <span data-i18n="bringWater">Bring Water</span></button>
+      <button data-assist="Request Physical Bill" class="assist-btn w-full p-3 border rounded-xl text-xs text-[#0f241d] font-semibold hover:bg-[#f0ead9]">💳 <span data-i18n="requestBill">Request Bill</span></button>
     </div>
-    <button id="closeAssistanceBtn" class="mt-4 text-[10px] text-gray-400 uppercase">Cancel</button>
+    <button id="closeAssistanceBtn" class="mt-4 text-[10px] text-gray-400 uppercase" data-i18n="cancel">Cancel</button>
+  </div>
+</div>
+
+<!-- Admin Dashboard Modal -->
+<div id="adminModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[80] hidden items-center justify-center p-4">
+  <div class="w-full max-w-4xl bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-gold)] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div class="p-4 border-b border-[var(--border-gold)] flex items-center justify-between gold-gradient-bg">
+      <div class="flex items-center space-x-2"><i class="fa fa-lock text-[var(--gold)]"></i><h3 class="font-luxury text-base font-bold text-[var(--text-primary)]">Admin Dashboard</h3></div>
+      <button id="closeAdminBtn" class="text-gray-400 hover:text-white p-1"><i class="fa fa-times text-lg"></i></button>
+    </div>
+    <div class="p-6 overflow-y-auto no-scrollbar">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <div class="bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-gold)] text-center">
+          <span id="adminTotalOrders" class="text-2xl font-bold text-[var(--gold)]">0</span><span class="text-[10px] text-gray-400 block uppercase tracking-wider">Total Orders</span>
+        </div>
+        <div class="bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-gold)] text-center">
+          <span id="adminRevenue" class="text-2xl font-bold text-green-400">Rs.0</span><span class="text-[10px] text-gray-400 block uppercase tracking-wider">Revenue</span>
+        </div>
+        <div class="bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-gold)] text-center">
+          <span id="adminAvgOrder" class="text-2xl font-bold text-[var(--text-primary)]">Rs.0</span><span class="text-[10px] text-gray-400 block uppercase tracking-wider">Avg Order</span>
+        </div>
+        <div class="bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-gold)] text-center">
+          <span id="adminTopDish" class="text-sm font-bold text-[var(--gold)] block truncate">--</span><span class="text-[10px] text-gray-400 block uppercase tracking-wider">Top Dish</span>
+        </div>
+      </div>
+      <div class="mb-6">
+        <h4 class="text-xs font-bold text-[var(--gold)] uppercase tracking-wider mb-3"><i class="fa fa-box-open mr-1"></i>Inventory Management</h4>
+        <div id="inventoryList" class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto no-scrollbar"></div>
+      </div>
+      <div class="mb-6">
+        <h4 class="text-xs font-bold text-[var(--gold)] uppercase tracking-wider mb-3"><i class="fa fa-tag mr-1"></i>Dynamic Pricing</h4>
+        <div class="flex gap-3 items-center">
+          <label class="flex items-center gap-2 text-xs text-[var(--text-primary)]">
+            <input type="checkbox" id="happyHourToggle" class="accent-[var(--gold)]"> Enable Happy Hour (20% OFF)
+          </label>
+          <input type="number" id="customDiscount" placeholder="Custom %" min="0" max="50" class="w-24 bg-[var(--bg-hover)] text-xs text-[var(--text-primary)] px-2 py-1 rounded border border-[var(--border-gold)]">
+        </div>
+      </div>
+      <div>
+        <h4 class="text-xs font-bold text-[var(--gold)] uppercase tracking-wider mb-3"><i class="fa fa-list mr-1"></i>Live Orders</h4>
+        <div id="liveOrdersList" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Tracking Modal -->
+<div id="trackingModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
+  <div class="w-full max-w-sm bg-[var(--bg-secondary)] rounded-2xl border border-[var(--border-gold)] shadow-2xl p-6">
+    <h3 class="font-luxury text-lg font-bold text-[var(--text-primary)] text-center mb-4" data-i18n="trackOrder">Track Your Order</h3>
+    <div id="trackingTimeline" class="space-y-0"></div>
+    <button id="closeTrackingBtn" class="w-full mt-4 bg-[var(--gold)] text-[#0f241d] py-2 rounded-lg text-xs font-bold" data-i18n="close">Close</button>
+  </div>
+</div>
+
+<!-- Voice Search Overlay -->
+<div id="voiceOverlay" class="fixed inset-0 bg-black/80 z-[90] hidden items-center justify-center">
+  <div class="text-center">
+    <div class="w-20 h-20 bg-[var(--gold)] rounded-full flex items-center justify-center mx-auto mb-4 voice-active"><i class="fa fa-microphone text-3xl text-[#0f241d]"></i></div>
+    <p class="text-white text-lg font-semibold" data-i18n="listening">Listening...</p>
+    <p class="text-gray-400 text-xs mt-2" data-i18n="voiceHint">Say something like "Show me spicy chicken under 300"</p>
+    <button id="stopVoiceBtn" class="mt-6 text-[var(--gold)] text-xs uppercase tracking-wider border border-[var(--gold)] px-4 py-2 rounded-full" data-i18n="cancel">Cancel</button>
   </div>
 </div>
 
 <div class="fixed bottom-6 right-6 lg:hidden z-30">
-  <button id="floatingCartBtn" class="bg-[#d4af37] text-[#0f241d] p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center relative">
+  <button id="floatingCartBtn" class="bg-[var(--gold)] text-[#0f241d] p-4 rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center relative">
     <i class="fa-solid fa-utensils text-xl"></i>
-    <span id="floatingCartCount" class="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[#0b1814]">0</span>
+    <span id="floatingCartCount" class="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-[var(--bg-primary)]">0</span>
   </button>
 </div>
 
-<footer class="bg-[#0a1814] border-t border-[#d4af37]/20 py-8 text-center text-xs text-gray-400 mt-12">
+<footer class="bg-[#0a1814] border-t border-[var(--border-gold)] py-8 text-center text-xs text-gray-400 mt-12">
   <div class="max-w-7xl mx-auto px-4 space-y-3">
-    <p class="font-luxury tracking-widest text-[#d4af37] font-semibold text-sm">GOLDEN PINE RESTAURANT</p>
+    <p class="font-luxury tracking-widest text-[var(--gold)] font-semibold text-sm">GOLDEN PINE RESTAURANT</p>
     <p class="max-w-md mx-auto text-gray-500 text-[11px] leading-relaxed">Elite culinary traditions for refined contemporary tastes. All rights reserved &copy; 2026.</p>
   </div>
 </footer>
 
 <script>
 const WHATSAPP_NUMBER = "917002979238";
-
 const CLOUDFLARE_WORKER_URL = "https://golden.dan-brayasky.workers.dev/";
 
-async function notifyBackend(type, data){
-  if (!CLOUDFLARE_WORKER_URL) return;
-  try {
-    await fetch(CLOUDFLARE_WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type, ...data, timestamp: new Date().toISOString() })
-    });
-  } catch (e) {
-    console.error('Backend notify failed:', e);
+const translations = {
+  en: {
+    restaurant: "Restaurant", tagline: "Fine Dining & Authentic Cuisines",
+    multiCuisine: "Multi-Cuisine", hygiene: "Hygiene First",
+    search: "Search dish...", feedback: "Feedback", basket: "Basket",
+    table: "Table", guests: "Guests", chefSignature: "Chef's Signature Platters",
+    traditionalThalis: "Traditional Thalis", thaliDesc: "Complete traditional meals featuring premium dishes. Rice & Dal are unlimited within thali package!",
+    unlimited: "Rice & Dal are unlimited", packaging: "Packaging Guidelines",
+    packagingDesc: "A standardized premium packaging fee of Rs.20/- per item applies to takeaway and delivery orders.",
+    nutrition: "Nutrition Info", nutritionDesc: "Toggle to show calories & protein per dish",
+    googleReview: "Leave us a Google review", savor: "Savor our wide selection of freshly made dishes.",
+    noMatches: "No matches found", refine: "Refine your search or select a different category.",
+    reviewOrder: "Review Order", specialInstructions: "Special Instructions",
+    specialReq: "Less spicy, no onion, etc.", subtotal: "Subtotal", packaging: "Packaging Surcharge (Rs.20/item)",
+    discount: "Happy Hour Discount (20%)", total: "Total", sendOrder: "Send Order to WhatsApp",
+    payNow: "Pay Now", guestImpressions: "Guest Impressions", rateExperience: "Rate your hospitality experience today:",
+    yourName: "Your Name", observations: "Observations & Notes", submitEvaluation: "Submit Evaluation",
+    assistanceRequired: "Assistance Required?", callServer: "Call Server", bringWater: "Bring Water",
+    requestBill: "Request Bill", cancel: "Cancel", chefNote: "Chef's Note",
+    spiceLevel: "Spice Level", portionSize: "Portion Size", customizeSpice: "Customize Spice",
+    mild: "Mild", medium: "Medium", hot: "Hot", extraHot: "Extra Hot",
+    addToOrder: "Add to Order", tableSetup: "Enter your table details:",
+    splitBill: "Split Bill", orderStatus: "Order Status", received: "Order Received",
+    preparing: "Preparing", ready: "Ready for Pickup", trackOrder: "Track Your Order",
+    close: "Close", listening: "Listening...", voiceHint: "Say something like \"Show me spicy chicken under 300\"",
+    happyHour: "Happy Hour", endsIn: "Ends in"
+  },
+  hi: {
+    restaurant: "रेस्टोरेंट", tagline: "फाइन डाइनिंग और प्रामाणिक व्यंजन",
+    multiCuisine: "बहु-पाक", hygiene: "स्वच्छता पहले",
+    search: "डिश खोजें...", feedback: "प्रतिक्रिया", basket: "टोकरी",
+    table: "मेज", guests: "मेहमान", chefSignature: "शेफ के हस्ताक्षर थाली",
+    traditionalThalis: "पारंपरिक थाली", thaliDesc: "प्रीमियम व्यंजनों के साथ पूर्ण पारंपरिक भोजन। थाली पैकेज के भीतर चावल और दाल असीमित हैं!",
+    unlimited: "चावल और दाल असीमित हैं", packaging: "पैकेजिंग दिशानिर्देश",
+    packagingDesc: "टेकअवे और डिलीवरी ऑर्डर के लिए Rs.20/- प्रति आइटम प्रीमियम पैकेजिंग शुल्क लागू होता है।",
+    nutrition: "पोषण जानकारी", nutritionDesc: "प्रति डिश कैलोरी और प्रोटीन दिखाने के लिए टॉगल करें",
+    googleReview: "हमें Google समीक्षा दें", savor: "हमारी ताज़ी बनी व्यंजनों का आनंद लें।",
+    noMatches: "कोई मेल नहीं मिला", refine: "अपनी खोज को परिष्कृत करें या एक अलग श्रेणी चुनें।",
+    reviewOrder: "ऑर्डर की समीक्षा करें", specialInstructions: "विशेष निर्देश",
+    specialReq: "कम मसालेदार, प्याज नहीं, आदि।", subtotal: "उप-योग", packaging: "पैकेजिंग अधिभार (Rs.20/आइटम)",
+    discount: "हैप्पी आवर छूट (20%)", total: "कुल", sendOrder: "WhatsApp पर ऑर्डर भेजें",
+    payNow: "अभी भुगतान करें", guestImpressions: "मेहमान की धारणाएं", rateExperience: "आज अपने आतिथ्य अनुभव का मूल्यांकन करें:",
+    yourName: "आपका नाम", observations: "टिप्पणियां और नोट्स", submitEvaluation: "मूल्यांकन जमा करें",
+    assistanceRequired: "सहायता चाहिए?", callServer: "सर्वर को बुलाएं", bringWater: "पानी लाएं",
+    requestBill: "बिल का अनुरोध करें", cancel: "रद्द करें", chefNote: "शेफ का नोट",
+    spiceLevel: "मसाला स्तर", portionSize: "हिस्सा आकार", customizeSpice: "मसाला अनुकूलित करें",
+    mild: "हल्का", medium: "मध्यम", hot: "तीखा", extraHot: "बहुत तीखा",
+    addToOrder: "ऑर्डर में जोड़ें", tableSetup: "अपनी मेज का विवरण दर्ज करें:",
+    splitBill: "बिल विभाजित करें", orderStatus: "ऑर्डर की स्थिति", received: "ऑर्डर प्राप्त हुआ",
+    preparing: "तैयारी हो रही है", ready: "पिकअप के लिए तैयार", trackOrder: "अपने ऑर्डर को ट्रैक करें",
+    close: "बंद करें", listening: "सुन रहा है...", voiceHint: "कुछ कहें जैसे \"300 से कम मसालेदार चिकन दिखाएं\"",
+    happyHour: "हैप्पी आवर", endsIn: "में समाप्त होता है"
+  },
+  bn: {
+    restaurant: "রেস্তোরাঁ", tagline: "ফাইন ডাইনিং এবং স্বাদু রন্ধন",
+    multiCuisine: "বহু-রন্ধন", hygiene: "পরিষ্কার-পরিচ্ছন্নতা প্রথম",
+    search: "খাবার খুঁজুন...", feedback: "মতামত", basket: "বাস্কেট",
+    table: "টেবিল", guests: "অতিথি", chefSignature: "শেফের স্বাক্ষর থালি",
+    traditionalThalis: "ঐতিহ্যবাহী থালি", thaliDesc: "প্রিমিয়াম খাবারের সাথে সম্পূর্ণ ঐতিহ্যবাহী খাবার। থালি প্যাকেজের মধ্যে ভাত এবং ডাল সীমাহীন!",
+    unlimited: "ভাত এবং ডাল সীমাহীন", packaging: "প্যাকেজিং নির্দেশিকা",
+    packagingDesc: "টেকঅ্যাওয়ে এবং ডেলিভারি অর্ডারের জন্য Rs.20/- প্রতি আইটেম প্রিমিয়াম প্যাকেজিং ফি প্রযোজ্য।",
+    nutrition: "পুষ্টি তথ্য", nutritionDesc: "প্রতি খাবারে ক্যালোরি এবং প্রোটিন দেখতে টগল করুন",
+    googleReview: "আমাদের Google রিভিউ দিন", savor: "আমাদের তাজা তৈরি খাবারের বিস্তৃত নির্বাচন উপভোগ করুন।",
+    noMatches: "কোনো মিল পাওয়া যায়নি", refine: "আপনার অনুসন্ধান পরিশীলন করুন বা একটি ভিন্ন বিভাগ নির্বাচন করুন।",
+    reviewOrder: "অর্ডার পর্যালোচনা করুন", specialInstructions: "বিশেষ নির্দেশাবলী",
+    specialReq: "কম ঝাল, পেঁয়াজ নয়, ইত্যাদি।", subtotal: "উপমোট", packaging: "প্যাকেজিং সারচার্জ (Rs.20/আইটেম)",
+    discount: "হ্যাপি আওয়ার ছাড় (20%)", total: "মোট", sendOrder: "WhatsApp-এ অর্ডার পাঠান",
+    payNow: "এখনই পেমেন্ট করুন", guestImpressions: "অতিথির অনুভূতি", rateExperience: "আজ আপনার আতিথেয়তা অভিজ্ঞতা রেট করুন:",
+    yourName: "আপনার নাম", observations: "পর্যবেক্ষণ এবং নোট", submitEvaluation: "মূল্যায়ন জমা দিন",
+    assistanceRequired: "সাহায্য প্রয়োজন?", callServer: "সার্ভারকে ডাকুন", bringWater: "জল আনুন",
+    requestBill: "বিলের অনুরোধ করুন", cancel: "বাতিল করুন", chefNote: "শেফের নোট",
+    spiceLevel: "মসলার মাত্রা", portionSize: "পরিমাণ", customizeSpice: "মসলা কাস্টমাইজ করুন",
+    mild: "হালকা", medium: "মাঝারি", hot: "ঝাল", extraHot: "অতিরিক্ত ঝাল",
+    addToOrder: "অর্ডারে যোগ করুন", tableSetup: "আপনার টেবিলের বিবরণ লিখুন:",
+    splitBill: "বিল ভাগ করুন", orderStatus: "অর্ডারের অবস্থা", received: "অর্ডার গৃহীত হয়েছে",
+    preparing: "তৈরি হচ্ছে", ready: "পিকআপের জন্য প্রস্তুত", trackOrder: "আপনার অর্ডার ট্র্যাক করুন",
+    close: "বন্ধ করুন", listening: "শুনছি...", voiceHint: "কিছু বলুন যেমন \"300-এর কম মসলাদার চিকেন দেখান\"",
+    happyHour: "হ্যাপি আওয়ার", endsIn: "মধ্যে শেষ হবে"
   }
-}
-
-function isWhatsAppConfigured(){
-  return /^\d{10,15}$/.test(WHATSAPP_NUMBER);
-}
-
-function showToast(message){
-  let toast = document.getElementById('appToast');
-  if (!toast){
-    toast = document.createElement('div');
-    toast.id = 'appToast';
-    toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#0f241d] border border-[#d4af37]/40 text-white text-xs px-4 py-3 rounded-xl shadow-luxury z-[70] max-w-xs text-center';
-    document.body.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.style.opacity = '1';
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => { toast.style.opacity = '0'; }, 3500);
-}
-
-function openWhatsApp(message){
-  if (!isWhatsAppConfigured()){
-    showToast("WhatsApp ordering isn't set up yet — the restaurant needs to add their number in the site settings.");
-    return;
-  }
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
-}
+};
 
 const menuData = {
   "Breakfast": {
     desc: "Fresh, premium breakfast selections prepared daily.",
     items: [
-      { name: "Roti sabji", price: 100, tags: ["Vegetarian"] },
-      { name: "Puri sabji", price: 120, tags: ["Vegetarian"] },
-      { name: "Plain paratha", price: 110, tags: ["Vegetarian"] },
-      { name: "Aloo paratha", price: 130, tags: ["Vegetarian", "Popular"] },
-      { name: "Gobi paratha", price: 150, tags: ["Vegetarian"] },
-      { name: "Onion paratha", price: 150, tags: ["Vegetarian"] },
-      { name: "Paneer paratha", price: 180, tags: ["Vegetarian", "Chef Recommended"] },
-      { name: "Veg paratha", price: 160, tags: ["Vegetarian"] },
-      { name: "Mix paratha", price: 200, tags: ["Vegetarian"] },
-      { name: "Omlette", price: 60, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Egg boiled (2pc)", price: 60, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Egg poach", price: 60, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Plain Maggie", price: 50, tags: ["Vegetarian"] },
-      { name: "Veg Maggie", price: 80, tags: ["Vegetarian"] },
-      { name: "Egg Maggie", price: 100, tags: ["Non-Vegetarian", "Egg"] }
+      { name: "Roti sabji", price: 100, tags: ["Vegetarian"], calories: 320, protein: "8g", prepTime: "8 min", spice: 20, note: "Soft whole wheat roti served with seasonal vegetable curry. A wholesome start to your day." },
+      { name: "Puri sabji", price: 120, tags: ["Vegetarian"], calories: 380, protein: "7g", prepTime: "10 min", spice: 25, note: "Fluffy deep-fried puris with aromatic potato curry. A festival favorite." },
+      { name: "Plain paratha", price: 110, tags: ["Vegetarian"], calories: 290, protein: "6g", prepTime: "8 min", spice: 10, note: "Layered whole wheat flatbread, hand-rolled and tawa-fried to golden perfection." },
+      { name: "Aloo paratha", price: 130, tags: ["Vegetarian", "Popular"], calories: 350, protein: "7g", prepTime: "10 min", spice: 30, note: "Stuffed with spiced mashed potatoes, coriander, and green chilies. Our bestseller!" },
+      { name: "Gobi paratha", price: 150, tags: ["Vegetarian"], calories: 310, protein: "6g", prepTime: "12 min", spice: 35, note: "Cauliflower stuffed paratha with ginger, garlic, and hand-pounded spices." },
+      { name: "Onion paratha", price: 150, tags: ["Vegetarian"], calories: 300, protein: "6g", prepTime: "10 min", spice: 40, note: "Caramelized onion filling with cumin and coriander. Sweet and savory balance." },
+      { name: "Paneer paratha", price: 180, tags: ["Vegetarian", "Chef Recommended"], calories: 380, protein: "14g", prepTime: "12 min", spice: 25, note: "Fresh cottage cheese with mint and roasted cumin. Chef's personal favorite." },
+      { name: "Veg paratha", price: 160, tags: ["Vegetarian"], calories: 340, protein: "8g", prepTime: "12 min", spice: 30, note: "Mixed vegetable stuffing with peas, carrots, and beans. Nutritious and filling." },
+      { name: "Mix paratha", price: 200, tags: ["Vegetarian"], calories: 420, protein: "12g", prepTime: "15 min", spice: 35, note: "The ultimate paratha — paneer, aloo, and gobi in one. A complete meal." },
+      { name: "Omlette", price: 60, tags: ["Non-Vegetarian", "Egg"], calories: 180, protein: "12g", prepTime: "5 min", spice: 20, note: "Three-egg fluffy omelette with onions, tomatoes, and green chilies." },
+      { name: "Egg boiled (2pc)", price: 60, tags: ["Non-Vegetarian", "Egg"], calories: 140, protein: "12g", prepTime: "3 min", spice: 0, note: "Perfectly boiled farm-fresh eggs with a sprinkle of black salt." },
+      { name: "Egg poach", price: 60, tags: ["Non-Vegetarian", "Egg"], calories: 130, protein: "11g", prepTime: "5 min", spice: 10, note: "Delicately poached eggs with a runny yolk center. Light and protein-rich." },
+      { name: "Plain Maggie", price: 50, tags: ["Vegetarian"], calories: 280, protein: "6g", prepTime: "5 min", spice: 15, note: "Classic instant noodles, comfort food at its simplest." },
+      { name: "Veg Maggie", price: 80, tags: ["Vegetarian"], calories: 320, protein: "8g", prepTime: "7 min", spice: 25, note: "Loaded with carrots, peas, and beans. A veggie twist on the classic." },
+      { name: "Egg Maggie", price: 100, tags: ["Non-Vegetarian", "Egg"], calories: 350, protein: "14g", prepTime: "8 min", spice: 25, note: "Scrambled egg mixed into spicy noodles. Protein-packed comfort food." }
     ]
   },
   "Noodles": {
     desc: "Wok-tossed noodles in classic and Schezwan styles.",
     items: [
-      { name: "Veg chow", price: 150, tags: ["Vegetarian"] },
-      { name: "Egg chow", price: 170, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Chicken chow", price: 190, tags: ["Non-Vegetarian"] },
-      { name: "Mix chow", price: 240, tags: ["Non-Vegetarian"] },
-      { name: "Veg Schezwan chow", price: 160, tags: ["Vegetarian", "Spicy"] },
-      { name: "Egg Schezwan chow", price: 180, tags: ["Non-Vegetarian", "Egg", "Spicy"] },
-      { name: "Chicken Schezwan chow", price: 220, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Mix Schezwan chow", price: 260, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Veg mushroom chow", price: 170, tags: ["Vegetarian"] },
-      { name: "Egg mushroom chow", price: 190, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Chicken mushroom chow", price: 220, tags: ["Non-Vegetarian"] },
-      { name: "Veg singapore chow", price: 170, tags: ["Vegetarian"] },
-      { name: "Egg singapore chow", price: 190, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Chicken singapore chow", price: 220, tags: ["Non-Vegetarian"] }
+      { name: "Veg chow", price: 150, tags: ["Vegetarian"], calories: 380, protein: "8g", prepTime: "10 min", spice: 30, note: "Stir-fried Hakka noodles with cabbage, carrots, and bell peppers." },
+      { name: "Egg chow", price: 170, tags: ["Non-Vegetarian", "Egg"], calories: 420, protein: "14g", prepTime: "12 min", spice: 30, note: "Classic chow mein topped with scrambled eggs and spring onions." },
+      { name: "Chicken chow", price: 190, tags: ["Non-Vegetarian"], calories: 450, protein: "22g", prepTime: "12 min", spice: 30, note: "Tender chicken strips wok-tossed with noodles and soy sauce." },
+      { name: "Mix chow", price: 240, tags: ["Non-Vegetarian"], calories: 520, protein: "26g", prepTime: "15 min", spice: 35, note: "The works — chicken, egg, and vegetables in one hearty plate." },
+      { name: "Veg Schezwan chow", price: 160, tags: ["Vegetarian", "Spicy"], calories: 400, protein: "8g", prepTime: "12 min", spice: 70, note: "Fiery Schezwan sauce with noodles, peanuts, and sesame. Not for the faint-hearted!" },
+      { name: "Egg Schezwan chow", price: 180, tags: ["Non-Vegetarian", "Egg", "Spicy"], calories: 440, protein: "15g", prepTime: "13 min", spice: 70, note: "Schezwan heat meets eggy goodness. A flavor explosion." },
+      { name: "Chicken Schezwan chow", price: 220, tags: ["Non-Vegetarian", "Spicy"], calories: 480, protein: "24g", prepTime: "14 min", spice: 75, note: "Our spiciest noodle dish. Schezwan peppercorns and dried red chilies." },
+      { name: "Mix Schezwan chow", price: 260, tags: ["Non-Vegetarian", "Spicy"], calories: 550, protein: "28g", prepTime: "16 min", spice: 75, note: "Maximum heat, maximum flavor. The ultimate Schezwan experience." },
+      { name: "Veg mushroom chow", price: 170, tags: ["Vegetarian"], calories: 350, protein: "9g", prepTime: "12 min", spice: 25, note: "Earthy mushrooms with noodles and oyster sauce. Umami-rich." },
+      { name: "Egg mushroom chow", price: 190, tags: ["Non-Vegetarian", "Egg"], calories: 400, protein: "16g", prepTime: "13 min", spice: 25, note: "Mushrooms and eggs — a classic Chinese combination." },
+      { name: "Chicken mushroom chow", price: 220, tags: ["Non-Vegetarian"], calories: 460, protein: "25g", prepTime: "14 min", spice: 25, note: "Tender chicken with shiitake mushrooms in a savory sauce." },
+      { name: "Veg singapore chow", price: 170, tags: ["Vegetarian"], calories: 370, protein: "8g", prepTime: "12 min", spice: 40, note: "Curry-spiced noodles with vegetables. A taste of Singapore." },
+      { name: "Egg singapore chow", price: 190, tags: ["Non-Vegetarian", "Egg"], calories: 410, protein: "15g", prepTime: "13 min", spice: 40, note: "Curry noodles with scrambled eggs. Aromatic and satisfying." },
+      { name: "Chicken singapore chow", price: 220, tags: ["Non-Vegetarian"], calories: 470, protein: "24g", prepTime: "14 min", spice: 40, note: "Curry-spiced chicken noodles. Exotic flavors, local comfort." }
     ]
   },
   "Fried Rice": {
     desc: "Wok-fried rice, classic and Schezwan style.",
     items: [
-      { name: "Veg fried rice", price: 160, tags: ["Vegetarian"] },
-      { name: "Egg fried rice", price: 180, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Chicken fried rice", price: 200, tags: ["Non-Vegetarian"] },
-      { name: "Veg mushroom fried rice", price: 180, tags: ["Vegetarian"] },
-      { name: "Egg mushroom fried rice", price: 200, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Chicken mushroom fried rice", price: 230, tags: ["Non-Vegetarian"] },
-      { name: "Mix fried rice", price: 270, tags: ["Non-Vegetarian"] },
-      { name: "Veg Schezwan fried rice", price: 170, tags: ["Vegetarian", "Spicy"] },
-      { name: "Egg Schezwan fried rice", price: 190, tags: ["Non-Vegetarian", "Egg", "Spicy"] },
-      { name: "Chicken Schezwan fried rice", price: 220, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Mushroom Schezwan fried rice", price: 190, tags: ["Vegetarian", "Spicy"] },
-      { name: "Mix Schezwan fried rice", price: 280, tags: ["Non-Vegetarian", "Spicy"] }
+      { name: "Veg fried rice", price: 160, tags: ["Vegetarian"], calories: 360, protein: "7g", prepTime: "10 min", spice: 20, note: "Fragrant basmati rice tossed with garden vegetables and soy sauce." },
+      { name: "Egg fried rice", price: 180, tags: ["Non-Vegetarian", "Egg"], calories: 400, protein: "13g", prepTime: "11 min", spice: 20, note: "Classic egg fried rice with scallions and sesame oil." },
+      { name: "Chicken fried rice", price: 200, tags: ["Non-Vegetarian"], calories: 440, protein: "22g", prepTime: "12 min", spice: 20, note: "Diced chicken breast with rice, peas, and carrots. A complete meal." },
+      { name: "Veg mushroom fried rice", price: 180, tags: ["Vegetarian"], calories: 340, protein: "8g", prepTime: "11 min", spice: 20, note: "Mushroom medley with fragrant rice. Earthy and satisfying." },
+      { name: "Egg mushroom fried rice", price: 200, tags: ["Non-Vegetarian", "Egg"], calories: 390, protein: "15g", prepTime: "12 min", spice: 20, note: "Eggs and mushrooms — the perfect umami combination." },
+      { name: "Chicken mushroom fried rice", price: 230, tags: ["Non-Vegetarian"], calories: 460, protein: "24g", prepTime: "13 min", spice: 20, note: "Triple protein power — chicken, egg, and mushrooms." },
+      { name: "Mix fried rice", price: 270, tags: ["Non-Vegetarian"], calories: 520, protein: "26g", prepTime: "15 min", spice: 25, note: "Everything in one plate. The ultimate fried rice experience." },
+      { name: "Veg Schezwan fried rice", price: 170, tags: ["Vegetarian", "Spicy"], calories: 380, protein: "7g", prepTime: "12 min", spice: 70, note: "Schezwan sauce meets fried rice. Spicy, smoky, irresistible." },
+      { name: "Egg Schezwan fried rice", price: 190, tags: ["Non-Vegetarian", "Egg", "Spicy"], calories: 420, protein: "14g", prepTime: "13 min", spice: 70, note: "Egg fried rice with a Schezwan kick. Heat lovers rejoice." },
+      { name: "Chicken Schezwan fried rice", price: 220, tags: ["Non-Vegetarian", "Spicy"], calories: 470, protein: "24g", prepTime: "14 min", spice: 75, note: "Our hottest fried rice. Schezwan peppercorns and chili oil." },
+      { name: "Mushroom Schezwan fried rice", price: 190, tags: ["Vegetarian", "Spicy"], calories: 360, protein: "8g", prepTime: "13 min", spice: 70, note: "Mushrooms in fiery Schezwan sauce. Vegetarian heat." },
+      { name: "Mix Schezwan fried rice", price: 280, tags: ["Non-Vegetarian", "Spicy"], calories: 550, protein: "28g", prepTime: "16 min", spice: 75, note: "The ultimate Schezwan fried rice. All proteins, maximum heat." }
     ]
   },
   "Chinese Chicken": {
     desc: "Indo-Chinese chicken specialities.",
     items: [
-      { name: "Chicken dry fry (bone)", price: 240, tags: ["Non-Vegetarian"] },
-      { name: "Chicken dry fry (boneless)", price: 280, tags: ["Non-Vegetarian"] },
-      { name: "Chilly chicken (dry/gravy) (bone)", price: 240, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Chilly chicken (dry/gravy) (boneless)", price: 280, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Garlic chicken (gravy) (bone)", price: 260, tags: ["Non-Vegetarian"] },
-      { name: "Garlic chicken (gravy) (boneless)", price: 300, tags: ["Non-Vegetarian"] },
-      { name: "Chicken sweet & sour", price: 290, tags: ["Non-Vegetarian"] },
-      { name: "Chicken Schezwan", price: 290, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Chicken Manchurian (dry/gravy)", price: 320, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Chicken with mushroom", price: 300, tags: ["Non-Vegetarian"] }
+      { name: "Chicken dry fry (bone)", price: 240, tags: ["Non-Vegetarian"], calories: 420, protein: "28g", prepTime: "15 min", spice: 50, note: "Crispy fried chicken with bone, tossed in aromatic spices." },
+      { name: "Chicken dry fry (boneless)", price: 280, tags: ["Non-Vegetarian"], calories: 400, protein: "30g", prepTime: "15 min", spice: 50, note: "Boneless chicken strips, double-fried for extra crunch." },
+      { name: "Chilly chicken (dry/gravy) (bone)", price: 240, tags: ["Non-Vegetarian", "Spicy"], calories: 430, protein: "27g", prepTime: "16 min", spice: 65, note: "Classic Indo-Chinese favorite. Capsicum and onion in spicy sauce." },
+      { name: "Chilly chicken (dry/gravy) (boneless)", price: 280, tags: ["Non-Vegetarian", "Spicy"], calories: 410, protein: "29g", prepTime: "16 min", spice: 65, note: "Boneless version of the classic. Tender and saucy." },
+      { name: "Garlic chicken (gravy) (bone)", price: 260, tags: ["Non-Vegetarian"], calories: 440, protein: "27g", prepTime: "16 min", spice: 45, note: "Garlic-forward sauce with tender chicken. Aromatic and rich." },
+      { name: "Garlic chicken (gravy) (boneless)", price: 300, tags: ["Non-Vegetarian"], calories: 420, protein: "29g", prepTime: "16 min", spice: 45, note: "Boneless garlic chicken. Smooth sauce, tender meat." },
+      { name: "Chicken sweet & sour", price: 290, tags: ["Non-Vegetarian"], calories: 450, protein: "26g", prepTime: "15 min", spice: 20, note: "Tangy pineapple and bell pepper sauce with crispy chicken." },
+      { name: "Chicken Schezwan", price: 290, tags: ["Non-Vegetarian", "Spicy"], calories: 460, protein: "26g", prepTime: "16 min", spice: 75, note: "Maximum Schezwan heat with chicken. For true spice warriors." },
+      { name: "Chicken Manchurian (dry/gravy)", price: 320, tags: ["Non-Vegetarian", "Spicy"], calories: 480, protein: "25g", prepTime: "18 min", spice: 60, note: "Deep-fried chicken balls in Manchurian sauce. A crowd pleaser." },
+      { name: "Chicken with mushroom", price: 300, tags: ["Non-Vegetarian"], calories: 440, protein: "28g", prepTime: "16 min", spice: 30, note: "Chicken and mushrooms in oyster sauce. Umami explosion." }
     ]
   },
   "Soup & Soup Chow": {
     desc: "Comforting soups and soup-noodle combinations.",
     items: [
-      { name: "Veg clear soup", price: 80, tags: ["Vegetarian"] },
-      { name: "Chicken clear soup", price: 100, tags: ["Non-Vegetarian"] },
-      { name: "Veg hot & sour soup", price: 130, tags: ["Vegetarian", "Spicy"] },
-      { name: "Veg manchow soup", price: 140, tags: ["Vegetarian", "Spicy"] },
-      { name: "Chicken hot & sour soup", price: 160, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Chicken manchow soup", price: 180, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Veg soup chow", price: 160, tags: ["Vegetarian"] },
-      { name: "Veg mushroom soup chow", price: 180, tags: ["Vegetarian"] },
-      { name: "Egg soup chow", price: 180, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Egg mushroom soup chow", price: 200, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Chicken soup chow", price: 200, tags: ["Non-Vegetarian"] },
-      { name: "Chicken mushroom soup chow", price: 230, tags: ["Non-Vegetarian"] },
-      { name: "Mix soup chow", price: 260, tags: ["Non-Vegetarian"] }
+      { name: "Veg clear soup", price: 80, tags: ["Vegetarian"], calories: 60, protein: "2g", prepTime: "8 min", spice: 10, note: "Light and clear vegetable broth with carrots, beans, and corn." },
+      { name: "Chicken clear soup", price: 100, tags: ["Non-Vegetarian"], calories: 90, protein: "8g", prepTime: "10 min", spice: 10, note: "Clear chicken broth with shredded chicken and herbs. Comfort in a bowl." },
+      { name: "Veg hot & sour soup", price: 130, tags: ["Vegetarian", "Spicy"], calories: 120, protein: "3g", prepTime: "10 min", spice: 60, note: "Tangy and spicy with tofu, mushrooms, and bamboo shoots." },
+      { name: "Veg manchow soup", price: 140, tags: ["Vegetarian", "Spicy"], calories: 140, protein: "3g", prepTime: "12 min", spice: 55, note: "Thick vegetable soup topped with crispy fried noodles." },
+      { name: "Chicken hot & sour soup", price: 160, tags: ["Non-Vegetarian", "Spicy"], calories: 150, protein: "10g", prepTime: "12 min", spice: 60, note: "Chicken, egg ribbons, and vegetables in hot & sour broth." },
+      { name: "Chicken manchow soup", price: 180, tags: ["Non-Vegetarian", "Spicy"], calories: 170, protein: "12g", prepTime: "14 min", spice: 55, note: "Rich chicken soup with crispy noodle topping. Hearty and warming." },
+      { name: "Veg soup chow", price: 160, tags: ["Vegetarian"], calories: 280, protein: "6g", prepTime: "12 min", spice: 20, note: "Noodles served in vegetable soup broth. Comfort food combo." },
+      { name: "Veg mushroom soup chow", price: 180, tags: ["Vegetarian"], calories: 300, protein: "7g", prepTime: "13 min", spice: 20, note: "Mushroom soup with noodles. Earthy and filling." },
+      { name: "Egg soup chow", price: 180, tags: ["Non-Vegetarian", "Egg"], calories: 320, protein: "13g", prepTime: "13 min", spice: 20, note: "Egg drop soup with noodles. Protein-rich comfort." },
+      { name: "Egg mushroom soup chow", price: 200, tags: ["Non-Vegetarian", "Egg"], calories: 340, protein: "14g", prepTime: "14 min", spice: 20, note: "Egg and mushroom soup with noodles. Double umami." },
+      { name: "Chicken soup chow", price: 200, tags: ["Non-Vegetarian"], calories: 360, protein: "20g", prepTime: "14 min", spice: 20, note: "Chicken soup with noodles. The classic sick-day remedy." },
+      { name: "Chicken mushroom soup chow", price: 230, tags: ["Non-Vegetarian"], calories: 380, protein: "22g", prepTime: "15 min", spice: 20, note: "Chicken, mushrooms, and noodles in rich broth. Ultimate comfort." },
+      { name: "Mix soup chow", price: 260, tags: ["Non-Vegetarian"], calories: 420, protein: "24g", prepTime: "16 min", spice: 25, note: "Everything in the soup — chicken, egg, mushrooms, and noodles." }
     ]
   },
   "Chinese Veg": {
     desc: "Indo-Chinese vegetarian favourites.",
     items: [
-      { name: "Crispy chilly potato", price: 160, tags: ["Vegetarian", "Spicy"] },
-      { name: "Chilly potato (dry/gravy)", price: 180, tags: ["Vegetarian", "Spicy"] },
-      { name: "Chilli paneer (dry/gravy)", price: 280, tags: ["Vegetarian", "Spicy"] },
-      { name: "Paneer Manchurian", price: 280, tags: ["Vegetarian", "Spicy"] },
-      { name: "Paneer Schezwan", price: 280, tags: ["Vegetarian", "Spicy"] },
-      { name: "Chilly Gobi (dry/gravy)", price: 190, tags: ["Vegetarian", "Spicy"] },
-      { name: "Crispy veg", price: 200, tags: ["Vegetarian"] },
-      { name: "Veg Schezwan (dry/gravy)", price: 220, tags: ["Vegetarian", "Spicy"] },
-      { name: "Veg Manchurian (dry/gravy)", price: 220, tags: ["Vegetarian", "Spicy"] },
-      { name: "Veg with mushroom (dry/gravy)", price: 260, tags: ["Vegetarian"] },
-      { name: "French fries", price: 150, tags: ["Vegetarian", "Popular"] }
+      { name: "Crispy chilly potato", price: 160, tags: ["Vegetarian", "Spicy"], calories: 320, protein: "4g", prepTime: "12 min", spice: 60, note: "Crispy potato wedges tossed in chilli sauce and sesame seeds." },
+      { name: "Chilly potato (dry/gravy)", price: 180, tags: ["Vegetarian", "Spicy"], calories: 340, protein: "4g", prepTime: "13 min", spice: 65, note: "Potato fingers in spicy chilli sauce with capsicum and onion." },
+      { name: "Chilli paneer (dry/gravy)", price: 280, tags: ["Vegetarian", "Spicy"], calories: 380, protein: "16g", prepTime: "15 min", spice: 60, note: "Crispy paneer cubes in chilli sauce. Vegetarian's chicken chilli." },
+      { name: "Paneer Manchurian", price: 280, tags: ["Vegetarian", "Spicy"], calories: 400, protein: "16g", prepTime: "16 min", spice: 55, note: "Paneer balls in Manchurian gravy. Rich and satisfying." },
+      { name: "Paneer Schezwan", price: 280, tags: ["Vegetarian", "Spicy"], calories: 390, protein: "16g", prepTime: "15 min", spice: 75, note: "Paneer in fiery Schezwan sauce. Maximum heat, maximum flavor." },
+      { name: "Chilly Gobi (dry/gravy)", price: 190, tags: ["Vegetarian", "Spicy"], calories: 280, protein: "5g", prepTime: "14 min", spice: 60, note: "Crispy cauliflower florets in chilli sauce. A vegetarian classic." },
+      { name: "Crispy veg", price: 200, tags: ["Vegetarian"], calories: 300, protein: "5g", prepTime: "12 min", spice: 30, note: "Mixed vegetable fritters, crispy and golden. Perfect starter." },
+      { name: "Veg Schezwan (dry/gravy)", price: 220, tags: ["Vegetarian", "Spicy"], calories: 320, protein: "5g", prepTime: "14 min", spice: 70, note: "Mixed vegetables in Schezwan sauce. Spicy veggie delight." },
+      { name: "Veg Manchurian (dry/gravy)", price: 220, tags: ["Vegetarian", "Spicy"], calories: 340, protein: "6g", prepTime: "15 min", spice: 55, note: "Vegetable balls in Manchurian gravy. Indo-Chinese staple." },
+      { name: "Veg with mushroom (dry/gravy)", price: 260, tags: ["Vegetarian"], calories: 300, protein: "7g", prepTime: "14 min", spice: 30, note: "Mixed vegetables with mushrooms in oyster sauce." },
+      { name: "French fries", price: 150, tags: ["Vegetarian", "Popular"], calories: 320, protein: "4g", prepTime: "8 min", spice: 5, note: "Crispy golden fries with peri-peri seasoning. Kids' favorite!" }
     ]
   },
   "Veg Indian": {
     desc: "Home-style vegetarian curries.",
     items: [
-      { name: "Aloo bhaji", price: 130, tags: ["Vegetarian"] },
-      { name: "Aloo jeera", price: 150, tags: ["Vegetarian"] },
-      { name: "Aloo Gobi", price: 230, tags: ["Vegetarian"] },
-      { name: "Aloo dum", price: 200, tags: ["Vegetarian", "Spicy"] },
-      { name: "Aloo bhujia", price: 130, tags: ["Vegetarian"] },
-      { name: "Mix veg", price: 260, tags: ["Vegetarian"] },
-      { name: "Kadai veg", price: 220, tags: ["Vegetarian", "Spicy"] },
-      { name: "Tawa veg", price: 220, tags: ["Vegetarian"] },
-      { name: "Matar paneer", price: 270, tags: ["Vegetarian"] },
-      { name: "Paneer butter masala", price: 290, tags: ["Vegetarian", "Popular"] },
-      { name: "Kadai paneer", price: 260, tags: ["Vegetarian", "Spicy"] },
-      { name: "Brinjal fry", price: 120, tags: ["Vegetarian"] }
+      { name: "Aloo bhaji", price: 130, tags: ["Vegetarian"], calories: 280, protein: "4g", prepTime: "10 min", spice: 35, note: "Simple spiced potatoes, homestyle comfort." },
+      { name: "Aloo jeera", price: 150, tags: ["Vegetarian"], calories: 290, protein: "4g", prepTime: "10 min", spice: 30, note: "Potatoes tempered with cumin seeds. Aromatic and light." },
+      { name: "Aloo Gobi", price: 230, tags: ["Vegetarian"], calories: 260, protein: "5g", prepTime: "12 min", spice: 35, note: "Classic potato and cauliflower curry. North Indian staple." },
+      { name: "Aloo dum", price: 200, tags: ["Vegetarian", "Spicy"], calories: 310, protein: "5g", prepTime: "14 min", spice: 55, note: "Baby potatoes in rich, spicy gravy. Kashmiri inspired." },
+      { name: "Aloo bhujia", price: 130, tags: ["Vegetarian"], calories: 270, protein: "4g", prepTime: "10 min", spice: 40, note: "Spicy shredded potato stir-fry. Crispy and addictive." },
+      { name: "Mix veg", price: 260, tags: ["Vegetarian"], calories: 240, protein: "6g", prepTime: "12 min", spice: 30, note: "Seasonal mixed vegetables in light gravy. Nutritious and colorful." },
+      { name: "Kadai veg", price: 220, tags: ["Vegetarian", "Spicy"], calories: 260, protein: "5g", prepTime: "13 min", spice: 60, note: "Vegetables cooked in kadai with whole spices. Smoky and aromatic." },
+      { name: "Tawa veg", price: 220, tags: ["Vegetarian"], calories: 250, protein: "5g", prepTime: "12 min", spice: 35, note: "Griddle-tossed vegetables with cumin and coriander." },
+      { name: "Matar paneer", price: 270, tags: ["Vegetarian"], calories: 340, protein: "14g", prepTime: "14 min", spice: 30, note: "Green peas and cottage cheese in tomato gravy. A classic." },
+      { name: "Paneer butter masala", price: 290, tags: ["Vegetarian", "Popular"], calories: 380, protein: "14g", prepTime: "15 min", spice: 25, note: "Creamy tomato gravy with paneer. Our most ordered vegetarian dish!" },
+      { name: "Kadai paneer", price: 260, tags: ["Vegetarian", "Spicy"], calories: 350, protein: "14g", prepTime: "14 min", spice: 60, note: "Paneer with bell peppers in kadai masala. Spicy and smoky." },
+      { name: "Brinjal fry", price: 120, tags: ["Vegetarian"], calories: 220, protein: "3g", prepTime: "10 min", spice: 40, note: "Pan-fried eggplant with mustard seeds and curry leaves. South Indian style." }
     ]
   },
   "Fish Indian": {
     desc: "Fresh fish, traditionally prepared.",
     items: [
-      { name: "Fish fry (2pc)", price: 180, tags: ["Non-Vegetarian"] },
-      { name: "Fish curry (2pc)", price: 200, tags: ["Non-Vegetarian"] },
-      { name: "Fish masala (2pc)", price: 220, tags: ["Non-Vegetarian", "Spicy"] }
+      { name: "Fish fry (2pc)", price: 180, tags: ["Non-Vegetarian"], calories: 320, protein: "24g", prepTime: "12 min", spice: 45, note: "Crispy fried fish with turmeric and red chilli coating. Coastal favorite." },
+      { name: "Fish curry (2pc)", price: 200, tags: ["Non-Vegetarian"], calories: 300, protein: "24g", prepTime: "14 min", spice: 40, note: "Traditional mustard-based fish curry. Bengali style." },
+      { name: "Fish masala (2pc)", price: 220, tags: ["Non-Vegetarian", "Spicy"], calories: 340, protein: "25g", prepTime: "15 min", spice: 55, note: "Fish in rich onion-tomato masala. Flavorful and aromatic." }
     ]
   },
   "Egg": {
     desc: "Simple, satisfying egg preparations.",
     items: [
-      { name: "Egg boiled (2pc)", price: 60, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Egg curry", price: 140, tags: ["Non-Vegetarian", "Egg"] },
-      { name: "Egg bhurji", price: 120, tags: ["Non-Vegetarian", "Egg", "Spicy"] },
-      { name: "Egg masala", price: 160, tags: ["Non-Vegetarian", "Egg", "Spicy"] }
+      { name: "Egg boiled (2pc)", price: 60, tags: ["Non-Vegetarian", "Egg"], calories: 140, protein: "12g", prepTime: "3 min", spice: 0, note: "Perfectly boiled farm-fresh eggs." },
+      { name: "Egg curry", price: 140, tags: ["Non-Vegetarian", "Egg"], calories: 280, protein: "14g", prepTime: "12 min", spice: 40, note: "Boiled eggs in onion-tomato gravy. Homestyle comfort." },
+      { name: "Egg bhurji", price: 120, tags: ["Non-Vegetarian", "Egg", "Spicy"], calories: 260, protein: "14g", prepTime: "8 min", spice: 55, note: "Scrambled eggs with onions, tomatoes, and green chilies." },
+      { name: "Egg masala", price: 160, tags: ["Non-Vegetarian", "Egg", "Spicy"], calories: 300, protein: "15g", prepTime: "12 min", spice: 50, note: "Eggs in spicy masala gravy. Rich and flavorful." }
     ]
   },
   "Chicken Indian": {
     desc: "Signature Indian chicken curries.",
     items: [
-      { name: "Chicken curry (4pcs)", price: 270, tags: ["Non-Vegetarian"] },
-      { name: "Chicken masala (4pc)", price: 300, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Chicken kosha (4pc)", price: 350, tags: ["Non-Vegetarian", "Spicy", "Chef Recommended"] },
-      { name: "Chicken butter masala (4pc)", price: 360, tags: ["Non-Vegetarian", "Popular"] },
-      { name: "Chicken mughlai (4pc)", price: 370, tags: ["Non-Vegetarian"] },
-      { name: "Chicken bharta (4pc)", price: 380, tags: ["Non-Vegetarian", "Spicy"] },
-      { name: "Chicken dopiaza (4pc)", price: 350, tags: ["Non-Vegetarian"] }
+      { name: "Chicken curry (4pcs)", price: 270, tags: ["Non-Vegetarian"], calories: 420, protein: "28g", prepTime: "18 min", spice: 40, note: "Classic chicken curry with onion-tomato base. The OG." },
+      { name: "Chicken masala (4pc)", price: 300, tags: ["Non-Vegetarian", "Spicy"], calories: 450, protein: "28g", prepTime: "18 min", spice: 55, note: "Chicken in thick masala gravy. Bold flavors, tender meat." },
+      { name: "Chicken kosha (4pc)", price: 350, tags: ["Non-Vegetarian", "Spicy", "Chef Recommended"], calories: 480, protein: "30g", prepTime: "22 min", spice: 65, note: "Slow-cooked Bengali style chicken. Dark, rich, and intensely flavorful. Chef's special!" },
+      { name: "Chicken butter masala (4pc)", price: 360, tags: ["Non-Vegetarian", "Popular"], calories: 520, protein: "28g", prepTime: "20 min", spice: 25, note: "Creamy, buttery tomato gravy with tandoori chicken. Our #1 bestseller!" },
+      { name: "Chicken mughlai (4pc)", price: 370, tags: ["Non-Vegetarian"], calories: 500, protein: "29g", prepTime: "22 min", spice: 30, note: "Rich, creamy Mughlai gravy with cashews and cream. Royal treatment." },
+      { name: "Chicken bharta (4pc)", price: 380, tags: ["Non-Vegetarian", "Spicy"], calories: 460, protein: "28g", prepTime: "20 min", spice: 60, note: "Smoky mashed chicken with onions and mustard oil. Unique and addictive." },
+      { name: "Chicken dopiaza (4pc)", price: 350, tags: ["Non-Vegetarian"], calories: 440, protein: "28g", prepTime: "20 min", spice: 45, note: "Double onion chicken curry. Sweet onions, savory chicken." }
     ]
   },
   "Roti & Rice": {
     desc: "Breads and rice to complete your meal.",
     items: [
-      { name: "Plain roti", price: 30, tags: ["Vegetarian"] },
-      { name: "Butter roti", price: 40, tags: ["Vegetarian"] },
-      { name: "Plain rice", price: 80, tags: ["Vegetarian"] },
-      { name: "Jeera rice", price: 140, tags: ["Vegetarian"] },
-      { name: "Veg pulao", price: 230, tags: ["Vegetarian"] },
-      { name: "Peas pulao", price: 180, tags: ["Vegetarian"] },
-      { name: "Paneer pulao", price: 200, tags: ["Vegetarian"] },
-      { name: "Chicken pulao", price: 300, tags: ["Non-Vegetarian"] }
+      { name: "Plain roti", price: 30, tags: ["Vegetarian"], calories: 80, protein: "3g", prepTime: "3 min", spice: 0, note: "Soft whole wheat flatbread, tawa-cooked." },
+      { name: "Butter roti", price: 40, tags: ["Vegetarian"], calories: 120, protein: "3g", prepTime: "3 min", spice: 0, note: "Roti brushed with melted butter. Simple luxury." },
+      { name: "Plain rice", price: 80, tags: ["Vegetarian"], calories: 200, protein: "4g", prepTime: "5 min", spice: 0, note: "Steamed basmati rice. Fluffy and fragrant." },
+      { name: "Jeera rice", price: 140, tags: ["Vegetarian"], calories: 220, protein: "4g", prepTime: "8 min", spice: 10, note: "Basmati rice tempered with cumin seeds. Aromatic side." },
+      { name: "Veg pulao", price: 230, tags: ["Vegetarian"], calories: 320, protein: "6g", prepTime: "12 min", spice: 20, note: "Mixed vegetable pulao with whole spices. One-pot meal." },
+      { name: "Peas pulao", price: 180, tags: ["Vegetarian"], calories: 280, protein: "6g", prepTime: "10 min", spice: 15, note: "Green peas pulao with mint. Fresh and light." },
+      { name: "Paneer pulao", price: 200, tags: ["Vegetarian"], calories: 340, protein: "12g", prepTime: "12 min", spice: 15, note: "Paneer cubes in fragrant rice. Protein-rich pulao." },
+      { name: "Chicken pulao", price: 300, tags: ["Non-Vegetarian"], calories: 420, protein: "22g", prepTime: "15 min", spice: 25, note: "Chicken and rice cooked together with whole spices. Aromatic one-pot meal." }
     ]
   },
   "Dal": {
     desc: "Comforting lentil preparations.",
     items: [
-      { name: "Plain dal", price: 100, tags: ["Vegetarian"] },
-      { name: "Dal fry", price: 130, tags: ["Vegetarian"] },
-      { name: "Dal butter fry", price: 140, tags: ["Vegetarian"] },
-      { name: "Dal tadka", price: 160, tags: ["Vegetarian"] },
-      { name: "Butter dal tadka", price: 180, tags: ["Vegetarian"] },
-      { name: "Egg dal tadka", price: 200, tags: ["Non-Vegetarian", "Egg"] }
+      { name: "Plain dal", price: 100, tags: ["Vegetarian"], calories: 180, protein: "10g", prepTime: "5 min", spice: 15, note: "Simple yellow lentils, lightly tempered. Daily comfort." },
+      { name: "Dal fry", price: 130, tags: ["Vegetarian"], calories: 220, protein: "10g", prepTime: "8 min", spice: 25, note: "Dal tempered with garlic, cumin, and dried red chilies." },
+      { name: "Dal butter fry", price: 140, tags: ["Vegetarian"], calories: 260, protein: "10g", prepTime: "8 min", spice: 25, note: "Dal fry with a generous dollop of butter. Richer and creamier." },
+      { name: "Dal tadka", price: 160, tags: ["Vegetarian"], calories: 240, protein: "10g", prepTime: "10 min", spice: 35, note: "Dal with aromatic tadka of ghee, cumin, and curry leaves." },
+      { name: "Butter dal tadka", price: 180, tags: ["Vegetarian"], calories: 290, protein: "10g", prepTime: "10 min", spice: 35, note: "Dal tadka with extra butter. Indulgent comfort food." },
+      { name: "Egg dal tadka", price: 200, tags: ["Non-Vegetarian", "Egg"], calories: 340, protein: "18g", prepTime: "12 min", spice: 35, note: "Dal tadka topped with boiled eggs. Protein power bowl." }
     ]
   },
   "Salad & Papad": {
     desc: "Light sides and accompaniments.",
     items: [
-      { name: "Papad (dry/fry)", price: 30, tags: ["Vegetarian"] },
-      { name: "Masala papad", price: 80, tags: ["Vegetarian", "Spicy"] },
-      { name: "Green salad", price: 120, tags: ["Vegetarian"] }
+      { name: "Papad (dry/fry)", price: 30, tags: ["Vegetarian"], calories: 60, protein: "2g", prepTime: "2 min", spice: 10, note: "Crispy lentil wafer. The perfect crunchy side." },
+      { name: "Masala papad", price: 80, tags: ["Vegetarian", "Spicy"], calories: 120, protein: "3g", prepTime: "5 min", spice: 50, note: "Papad topped with onion, tomato, and spicy masala." },
+      { name: "Green salad", price: 120, tags: ["Vegetarian"], calories: 80, protein: "3g", prepTime: "5 min", spice: 5, note: "Fresh cucumber, tomato, onion, and lemon. Light and refreshing." }
     ]
   },
   "Beverage": {
     desc: "Hot and cold drinks to round off your meal.",
     items: [
-      { name: "Red tea", price: 20, tags: [] },
-      { name: "Milk tea", price: 30, tags: [] },
-      { name: "Lemon tea", price: 30, tags: [] },
-      { name: "Coffee", price: 60, tags: [] },
-      { name: "Black coffee", price: 40, tags: [] },
-      { name: "Fresh lime water", price: 80, tags: [] },
-      { name: "Mineral water", price: 20, tags: [] }
+      { name: "Red tea", price: 20, tags: [], calories: 5, protein: "0g", prepTime: "3 min", spice: 0, note: "Traditional red tea without milk. Light and refreshing." },
+      { name: "Milk tea", price: 30, tags: [], calories: 80, protein: "3g", prepTime: "5 min", spice: 0, note: "Classic Indian chai with milk and cardamom." },
+      { name: "Lemon tea", price: 30, tags: [], calories: 25, protein: "0g", prepTime: "3 min", spice: 0, note: "Black tea with fresh lemon. Refreshing and zesty." },
+      { name: "Coffee", price: 60, tags: [], calories: 90, protein: "2g", prepTime: "5 min", spice: 0, note: "South Indian filter coffee. Strong and aromatic." },
+      { name: "Black coffee", price: 40, tags: [], calories: 5, protein: "0g", prepTime: "3 min", spice: 0, note: "Strong black coffee. For the purists." },
+      { name: "Fresh lime water", price: 80, tags: [], calories: 40, protein: "0g", prepTime: "3 min", spice: 0, note: "Fresh lime soda. Sweet, salty, or plain." },
+      { name: "Mineral water", price: 20, tags: [], calories: 0, protein: "0g", prepTime: "0 min", spice: 0, note: "Chilled mineral water." }
     ]
   }
 };
@@ -475,280 +716,755 @@ let cart = [];
 let currentCategory = Object.keys(menuData)[0];
 let activeTag = "All";
 let layout = "grid";
+let currentLang = "en";
+let showNutrition = false;
+let tableNumber = "";
+let guestCount = "";
+let happyHourActive = false;
+let customDiscount = 0;
+let outOfStockItems = new Set();
+let selectedDish = null;
+let selectedPortion = "full";
+let orderHistory = [];
+let currentOrderStatus = null;
 
-// ===== EVENT DELEGATION SETUP =====
-// Instead of inline onclick, we use data attributes and event delegation
-
-function setupEventDelegation() {
-  // Menu items grid - handles add-to-cart clicks
-  document.getElementById('menuItemsGrid').addEventListener('click', function(e) {
-    const btn = e.target.closest('[data-action="add-to-cart"]');
-    if (btn) {
-      const name = btn.dataset.name;
-      const price = parseInt(btn.dataset.price);
-      addToCart(name, price);
-    }
+// ==================== TRANSLATION ====================
+function applyTranslations() {
+  const t = translations[currentLang];
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (t[key]) el.textContent = t[key];
   });
-
-  // Thali list - handles add-to-cart clicks
-  document.getElementById('thaliList').addEventListener('click', function(e) {
-    const btn = e.target.closest('[data-action="add-to-cart"]');
-    if (btn) {
-      const name = btn.dataset.name;
-      const price = parseInt(btn.dataset.price);
-      addToCart(name, price);
-    }
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (t[key]) el.placeholder = t[key];
   });
+}
 
-  // Cart items list - handles increment, decrement, remove
-  document.getElementById('cartItemsList').addEventListener('click', function(e) {
-    const incBtn = e.target.closest('[data-action="increment"]');
-    const decBtn = e.target.closest('[data-action="decrement"]');
-    const remBtn = e.target.closest('[data-action="remove"]');
+// ==================== OFFLINE DETECTION ====================
+function updateOnlineStatus() {
+  const banner = document.getElementById("offlineBanner");
+  if (!navigator.onLine) {
+    banner.style.display = "block";
+  } else {
+    banner.style.display = "none";
+  }
+}
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);
+updateOnlineStatus();
 
-    if (incBtn) {
-      incrementCart(parseInt(incBtn.dataset.index));
-    } else if (decBtn) {
-      decrementCart(parseInt(decBtn.dataset.index));
-    } else if (remBtn) {
-      removeFromCart(parseInt(remBtn.dataset.index));
-    }
-  });
+// ==================== THEME TOGGLE ====================
+document.getElementById("themeToggle").addEventListener("click", () => {
+  const body = document.body;
+  const icon = document.getElementById("themeIcon");
+  if (body.getAttribute("data-theme") === "dark") {
+    body.setAttribute("data-theme", "light");
+    icon.className = "fa fa-moon";
+  } else {
+    body.setAttribute("data-theme", "dark");
+    icon.className = "fa fa-sun";
+  }
+});
 
-  // Assistance modal buttons
-  document.querySelectorAll('.assist-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      sendAssistance(this.dataset.assist);
+// ==================== NUTRITION TOGGLE ====================
+document.getElementById("nutritionToggle").addEventListener("change", (e) => {
+  showNutrition = e.target.checked;
+  renderMenu();
+});
+
+// ==================== LANGUAGE SWITCHER ====================
+document.getElementById("langSelect").addEventListener("change", (e) => {
+  currentLang = e.target.value;
+  applyTranslations();
+});
+
+// ==================== VOICE SEARCH ====================
+let voiceRecognition = null;
+if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  voiceRecognition = new SpeechRecognition();
+  voiceRecognition.continuous = false;
+  voiceRecognition.interimResults = false;
+  voiceRecognition.lang = "en-IN";
+
+  voiceRecognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript.toLowerCase();
+    document.getElementById("voiceOverlay").classList.add("hidden");
+    document.getElementById("voiceOverlay").classList.remove("flex");
+
+    // Parse voice command
+    const searchInput = document.getElementById("searchInput");
+    searchInput.value = transcript;
+
+    // Auto-detect tag filters from voice
+    if (transcript.includes("spicy")) activeTag = "Spicy";
+    else if (transcript.includes("vegetarian") || transcript.includes("veg")) activeTag = "Vegetarian";
+    else if (transcript.includes("non-veg") || transcript.includes("chicken") || transcript.includes("fish") || transcript.includes("egg")) activeTag = "Non-Vegetarian";
+    else activeTag = "All";
+
+    renderTagFilters();
+    renderTabs();
+    renderMenu();
+    showToast("Voice search: " + transcript);
+  };
+
+  voiceRecognition.onerror = () => {
+    document.getElementById("voiceOverlay").classList.add("hidden");
+    document.getElementById("voiceOverlay").classList.remove("flex");
+    showToast("Voice search failed. Please try again.");
+  };
+}
+
+document.getElementById("voiceSearchBtn").addEventListener("click", () => {
+  if (!voiceRecognition) {
+    showToast("Voice search not supported in this browser.");
+    return;
+  }
+  document.getElementById("voiceOverlay").classList.remove("hidden");
+  document.getElementById("voiceOverlay").classList.add("flex");
+  voiceRecognition.start();
+});
+
+document.getElementById("stopVoiceBtn").addEventListener("click", () => {
+  if (voiceRecognition) voiceRecognition.stop();
+  document.getElementById("voiceOverlay").classList.add("hidden");
+  document.getElementById("voiceOverlay").classList.remove("flex");
+});
+
+// ==================== ADMIN DASHBOARD ====================
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === "A") {
+    e.preventDefault();
+    document.getElementById("adminModal").classList.remove("hidden");
+    document.getElementById("adminModal").classList.add("flex");
+    renderAdminDashboard();
+  }
+});
+
+document.getElementById("adminToggle").addEventListener("click", () => {
+  document.getElementById("adminModal").classList.remove("hidden");
+  document.getElementById("adminModal").classList.add("flex");
+  renderAdminDashboard();
+});
+
+document.getElementById("closeAdminBtn").addEventListener("click", () => {
+  document.getElementById("adminModal").classList.add("hidden");
+  document.getElementById("adminModal").classList.remove("flex");
+});
+
+function renderAdminDashboard() {
+  // Stats
+  document.getElementById("adminTotalOrders").textContent = orderHistory.length;
+  const revenue = orderHistory.reduce((s, o) => s + o.total, 0);
+  document.getElementById("adminRevenue").textContent = "Rs." + revenue;
+  document.getElementById("adminAvgOrder").textContent = "Rs." + (orderHistory.length ? Math.round(revenue / orderHistory.length) : 0);
+
+  // Top dish
+  const dishCounts = {};
+  orderHistory.forEach(o => o.items.forEach(i => { dishCounts[i.name] = (dishCounts[i.name] || 0) + i.qty; }));
+  const topDish = Object.entries(dishCounts).sort((a, b) => b[1] - a[1])[0];
+  document.getElementById("adminTopDish").textContent = topDish ? topDish[0] : "--";
+
+  // Inventory
+  const inventoryList = document.getElementById("inventoryList");
+  let inventoryHTML = "";
+  Object.entries(menuData).forEach(([cat, data]) => {
+    data.items.forEach(item => {
+      const isOut = outOfStockItems.has(item.name);
+      inventoryHTML += `<div class="flex justify-between items-center bg-[var(--bg-hover)] p-2 rounded-lg border border-[var(--border-gold)]">
+        <span class="text-xs text-[var(--text-primary)] truncate">${item.name}</span>
+        <button data-item="${item.name.replace(/"/g, "&quot;")}" class="stock-toggle text-[10px] px-2 py-1 rounded-full ${isOut ? "bg-red-600 text-white" : "bg-green-600 text-white"}">${isOut ? "Out of Stock" : "In Stock"}</button>
+      </div>`;
     });
   });
+  inventoryList.innerHTML = inventoryHTML;
+
+  inventoryList.querySelectorAll(".stock-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const itemName = btn.dataset.item;
+      if (outOfStockItems.has(itemName)) {
+        outOfStockItems.delete(itemName);
+      } else {
+        outOfStockItems.add(itemName);
+      }
+      renderAdminDashboard();
+      renderMenu();
+    });
+  });
+
+  // Live orders
+  const liveOrdersList = document.getElementById("liveOrdersList");
+  if (orderHistory.length === 0) {
+    liveOrdersList.innerHTML = "<p class=\"text-xs text-gray-500 text-center\">No orders yet</p>";
+  } else {
+    liveOrdersList.innerHTML = orderHistory.slice(-5).reverse().map((o, i) => `
+      <div class="bg-[var(--bg-hover)] p-2 rounded-lg border border-[var(--border-gold)] flex justify-between items-center">
+        <div>
+          <span class="text-xs text-[var(--text-primary)] font-bold">${o.table}</span>
+          <span class="text-[10px] text-gray-400 block">${o.items.length} items • Rs.${o.total}</span>
+        </div>
+        <span class="text-[10px] px-2 py-1 rounded-full ${o.status === "delivered" ? "bg-green-600/20 text-green-400" : "bg-yellow-600/20 text-yellow-400"}">${o.status}</span>
+      </div>
+    `).join("");
+  }
 }
 
-function renderThali(){
-  const box = document.getElementById('thaliList');
+document.getElementById("happyHourToggle").addEventListener("change", (e) => {
+  happyHourActive = e.target.checked;
+  document.getElementById("pricingBanner").classList.toggle("hidden", !happyHourActive);
+  renderMenu();
+  updateCartCount();
+});
+
+document.getElementById("customDiscount").addEventListener("input", (e) => {
+  customDiscount = parseInt(e.target.value) || 0;
+  updateCartCount();
+});
+
+// ==================== TABLE SETUP ====================
+document.getElementById("saveTableBtn").addEventListener("click", () => {
+  tableNumber = document.getElementById("tableInput").value;
+  guestCount = document.getElementById("guestInput").value;
+  if (tableNumber) {
+    document.getElementById("tableSetup").classList.add("hidden");
+    document.getElementById("tableBanner").classList.remove("hidden");
+    document.getElementById("tableDisplay").textContent = tableNumber;
+    document.getElementById("guestDisplay").textContent = guestCount || "--";
+    document.getElementById("splitBillSection").classList.remove("hidden");
+    showToast("Table " + tableNumber + " registered!");
+  }
+});
+
+// ==================== DISH MODAL ====================
+function openDishModal(item, category) {
+  selectedDish = { ...item, category };
+  selectedPortion = "full";
+
+  document.getElementById("dishModalName").textContent = item.name;
+  document.getElementById("dishModalPrice").textContent = "Rs." + item.price;
+  document.getElementById("dishModalNote").textContent = item.note || "A delicious preparation from our kitchen.";
+  document.getElementById("dishModalPrepTime").innerHTML = `<i class="fa fa-clock mr-1"></i>${item.prepTime || "12 min"}`;
+
+  // Tags
+  const tagsContainer = document.getElementById("dishModalTags");
+  tagsContainer.innerHTML = item.tags.map(t => {
+    const color = t === "Spicy" ? "bg-red-500/20 text-red-400" : t === "Popular" ? "bg-yellow-500/20 text-yellow-400" : t === "Chef Recommended" ? "bg-purple-500/20 text-purple-400" : "bg-[var(--gold)]/10 text-[var(--gold)]";
+    return `<span class="text-[9px] uppercase tracking-wide ${color} px-2 py-0.5 rounded-full">${t}</span>`;
+  }).join(" ");
+
+  // Nutrition
+  document.getElementById("dishCalories").textContent = item.calories || "--";
+  document.getElementById("dishProtein").textContent = item.protein || "--";
+  document.getElementById("dishPrepTime").textContent = item.prepTime || "--";
+
+  // Spice level
+  const spicePercent = item.spice || 50;
+  document.getElementById("spiceFill").style.width = spicePercent + "%";
+  document.getElementById("spiceSlider").value = spicePercent;
+  updateSpiceLabel(spicePercent);
+
+  // Reset portion buttons
+  document.querySelectorAll(".portion-btn").forEach(btn => {
+    btn.classList.remove("bg-[var(--gold)]/20", "border-[var(--gold)]");
+    btn.classList.add("bg-[var(--bg-card)]", "border-[var(--border-gold)]");
+  });
+  document.querySelector('[data-portion="full"]').classList.add("bg-[var(--gold)]/20", "border-[var(--gold)]");
+  document.querySelector('[data-portion="full"]').classList.remove("bg-[var(--bg-card)]", "border-[var(--border-gold)]");
+
+  document.getElementById("dishSpecialRequest").value = "";
+  document.getElementById("dishModal").classList.remove("hidden");
+  document.getElementById("dishModal").classList.add("flex");
+}
+
+document.getElementById("closeDishModal").addEventListener("click", () => {
+  document.getElementById("dishModal").classList.add("hidden");
+  document.getElementById("dishModal").classList.remove("flex");
+});
+
+document.getElementById("spiceSlider").addEventListener("input", (e) => {
+  document.getElementById("spiceFill").style.width = e.target.value + "%";
+  updateSpiceLabel(e.target.value);
+});
+
+function updateSpiceLabel(value) {
+  const label = document.getElementById("spiceLabel");
+  if (value < 25) label.textContent = translations[currentLang].mild || "Mild";
+  else if (value < 50) label.textContent = translations[currentLang].medium || "Medium";
+  else if (value < 75) label.textContent = translations[currentLang].hot || "Hot";
+  else label.textContent = translations[currentLang].extraHot || "Extra Hot";
+}
+
+document.querySelectorAll(".portion-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    selectedPortion = btn.dataset.portion;
+    document.querySelectorAll(".portion-btn").forEach(b => {
+      b.classList.remove("bg-[var(--gold)]/20", "border-[var(--gold)]");
+      b.classList.add("bg-[var(--bg-card)]", "border-[var(--border-gold)]");
+    });
+    btn.classList.add("bg-[var(--gold)]/20", "border-[var(--gold)]");
+    btn.classList.remove("bg-[var(--bg-card)]", "border-[var(--border-gold)]");
+
+    // Update price display
+    let multiplier = 1;
+    if (selectedPortion === "half") multiplier = 0.6;
+    if (selectedPortion === "family") multiplier = 2.5;
+    document.getElementById("dishModalPrice").textContent = "Rs." + Math.round(selectedDish.price * multiplier);
+  });
+});
+
+document.getElementById("addDishToCart").addEventListener("click", () => {
+  if (!selectedDish) return;
+  let multiplier = 1;
+  if (selectedPortion === "half") multiplier = 0.6;
+  if (selectedPortion === "family") multiplier = 2.5;
+
+  const finalPrice = Math.round(selectedDish.price * multiplier);
+  const portionLabel = selectedPortion === "half" ? " (Half)" : selectedPortion === "family" ? " (Family)" : "";
+  const specialReq = document.getElementById("dishSpecialRequest").value;
+  const spiceLevel = document.getElementById("spiceSlider").value;
+
+  const cartItem = {
+    name: selectedDish.name + portionLabel,
+    baseName: selectedDish.name,
+    price: finalPrice,
+    qty: 1,
+    specialReq: specialReq,
+    spiceLevel: spiceLevel,
+    portion: selectedPortion
+  };
+
+  cart.push(cartItem);
+  updateCartCount();
+  document.getElementById("dishModal").classList.add("hidden");
+  document.getElementById("dishModal").classList.remove("flex");
+  showToast(selectedDish.name + portionLabel + " added to cart!");
+});
+
+// ==================== SPLIT BILL ====================
+document.getElementById("toggleSplitBill").addEventListener("click", () => {
+  const panel = document.getElementById("splitBillPanel");
+  panel.classList.toggle("hidden");
+  renderSplitBill();
+});
+
+function renderSplitBill() {
+  const panel = document.getElementById("splitBillPanel");
+  if (cart.length === 0) {
+    panel.innerHTML = "<p class=\"text-xs text-gray-500\">No items to split</p>";
+    return;
+  }
+
+  panel.innerHTML = cart.map((item, i) => `
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" class="split-checkbox sr-only" data-index="${i}" checked>
+      <div class="flex-1 bg-[var(--bg-hover)] p-2 rounded-lg border border-[var(--border-gold)] text-xs text-[var(--text-primary)] flex justify-between">
+        <span>${item.name}</span>
+        <span class="text-[var(--gold)]">Rs.${item.price * item.qty}</span>
+      </div>
+    </label>
+  `).join("");
+
+  panel.querySelectorAll(".split-checkbox").forEach(cb => {
+    cb.addEventListener("change", updateSplitTotal);
+  });
+}
+
+function updateSplitTotal() {
+  const checked = document.querySelectorAll(".split-checkbox:checked");
+  let splitTotal = 0;
+  checked.forEach(cb => {
+    const idx = parseInt(cb.dataset.index);
+    splitTotal += cart[idx].price * cart[idx].qty;
+  });
+  const packaging = checked.length * 20;
+  document.getElementById("grandTotalPrice").textContent = "Rs." + (splitTotal + packaging);
+}
+
+// ==================== ORDER TRACKING ====================
+function startOrderTracking() {
+  currentOrderStatus = { step: 0, status: "received" };
+  document.getElementById("orderTrackingPreview").classList.remove("hidden");
+
+  const steps = ["received", "preparing", "ready"];
+  const delays = [0, 30000, 60000]; // 0s, 30s, 60s for demo
+
+  steps.forEach((step, i) => {
+    setTimeout(() => {
+      currentOrderStatus = { step: i, status: step };
+      updateTrackingUI();
+    }, delays[i]);
+  });
+}
+
+function updateTrackingUI() {
+  const dots = document.querySelectorAll("#orderTrackingPreview .timeline-dot");
+  const texts = document.querySelectorAll("#orderTrackingPreview .timeline-step p:first-of-type");
+
+  dots.forEach((dot, i) => {
+    if (i <= currentOrderStatus.step) {
+      dot.classList.add("active");
+      texts[i].classList.remove("text-gray-400");
+      texts[i].classList.add("text-[var(--text-primary)]", "font-semibold");
+    }
+  });
+}
+
+// ==================== HAPPY HOUR COUNTDOWN ====================
+let countdownInterval;
+function startCountdown() {
+  let minutes = 45, seconds = 0;
+  countdownInterval = setInterval(() => {
+    if (seconds === 0) { minutes--; seconds = 59; }
+    else { seconds--; }
+    document.getElementById("countdownTimer").textContent = 
+      String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    if (minutes === 0 && seconds === 0) clearInterval(countdownInterval);
+  }, 1000);
+}
+
+// ==================== CORE MENU FUNCTIONS ====================
+function getCategoriesWithTag(tag) {
+  if (tag === "All") return Object.keys(menuData);
+  const result = [];
+  for (const [cat, data] of Object.entries(menuData)) {
+    if (data.items.some(item => item.tags.includes(tag))) result.push(cat);
+  }
+  return result;
+}
+
+function renderThali() {
+  const box = document.getElementById("thaliList");
   box.innerHTML = thaliData.map(t => {
-    const safeName = t.name.replace(/"/g, '&quot;');
-    return `<div class="flex justify-between items-center bg-[#0d211a] p-3 rounded-lg border border-[#d4af37]/15">
-      <div><h4 class="text-xs font-bold text-white">${t.name}</h4><p class="text-[10px] text-gray-400">${t.desc}</p></div>
+    const safeName = t.name.replace(/"/g, "&quot;");
+    return `<div class="flex justify-between items-center bg-[#0d211a] p-3 rounded-lg border border-[var(--border-gold)]">
+      <div><h4 class="text-xs font-bold text-[var(--text-primary)]">${t.name}</h4><p class="text-[10px] text-gray-400">${t.desc}</p></div>
       <div class="text-right">
-        <span class="text-[#d4af37] text-xs font-bold block">₹${t.price}</span>
-        <button data-action="add-to-cart" data-name="${safeName}" data-price="${t.price}" class="text-[9px] bg-[#d4af37]/20 text-[#d4af37] px-2.5 py-1 rounded-full hover:bg-[#d4af37] hover:text-[#0f241d] font-bold mt-1">+ ADD</button>
+        <span class="text-[var(--gold)] text-xs font-bold block">Rs.${t.price}</span>
+        <button data-action="add-to-cart" data-name="${safeName}" data-price="${t.price}" class="text-[9px] bg-[var(--gold)]/20 text-[var(--gold)] px-2.5 py-1 rounded-full hover:bg-[var(--gold)] hover:text-[#0f241d] font-bold mt-1">+ ADD</button>
       </div>
     </div>`;
-  }).join('');
+  }).join("");
 }
 
-function renderTabs(){
-  const box = document.getElementById('categoryTabs');
-  box.innerHTML = Object.keys(menuData).map(cat => {
+function renderTabs() {
+  const box = document.getElementById("categoryTabs");
+  const visibleCategories = getCategoriesWithTag(activeTag);
+  box.innerHTML = visibleCategories.map(cat => {
     const active = cat === currentCategory;
-    const style = active ? 'background:#d4af37;color:#0f241d;' : '';
-    return `<button class="tab-btn px-4 py-2 rounded-full text-xs font-bold uppercase border border-[#d4af37]/30 text-[#d4af37]" style="${style}" data-cat="${cat}">${cat}</button>`;
-  }).join('');
-  box.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => { currentCategory = btn.dataset.cat; renderTabs(); renderMenu(); });
+    const style = active ? "background:var(--gold);color:#0f241d;" : "";
+    return `<button class="tab-btn px-4 py-2 rounded-full text-xs font-bold uppercase border border-[var(--border-gold)] text-[var(--gold)]" style="${style}" data-cat="${cat}">${cat}</button>`;
+  }).join("");
+  box.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => { currentCategory = btn.dataset.cat; renderTabs(); renderMenu(); });
+  });
 }
 
-function renderTagFilters(){
-  const box = document.getElementById('tagFilters');
+function renderTagFilters() {
+  const box = document.getElementById("tagFilters");
   const tags = ["All", ...ALL_TAGS];
   box.innerHTML = tags.map(tag => {
     const colorClass = tag === "Spicy" ? "border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white"
       : tag === "Popular" ? "border-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-black"
-      : "border-[#d4af37]/30 text-[#d4af37] hover:bg-[#d4af37] hover:text-[#0f241d]";
+      : "border-[var(--border-gold)] text-[var(--gold)] hover:bg-[var(--gold)] hover:text-[#0f241d]";
     return `<button class="tag-btn px-4 py-1.5 rounded-full text-[10px] font-bold uppercase border ${colorClass} ${tag===activeTag?'tag-active':''}" data-tag="${tag}">${tag}</button>`;
-  }).join('');
-  box.querySelectorAll('.tag-btn').forEach(btn => btn.onclick = () => { activeTag = btn.dataset.tag; renderTagFilters(); renderMenu(); });
+  }).join("");
+  box.querySelectorAll(".tag-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeTag = btn.dataset.tag;
+      const visibleCategories = getCategoriesWithTag(activeTag);
+      if (visibleCategories.length > 0 && !visibleCategories.includes(currentCategory)) {
+        currentCategory = visibleCategories[0];
+      }
+      renderTagFilters(); renderTabs(); renderMenu();
+    });
+  });
 }
 
-function renderMenu(){
-  document.getElementById('currentCategoryTitle').textContent = currentCategory;
-  const grid = document.getElementById('menuItemsGrid');
-  const noResults = document.getElementById('noResults');
-  const searchTerm = (document.getElementById('searchInput').value || document.getElementById('searchInputMobile').value || '').toLowerCase().trim();
+function renderMenu() {
+  document.getElementById("currentCategoryTitle").textContent = currentCategory;
+  const grid = document.getElementById("menuItemsGrid");
+  const noResults = document.getElementById("noResults");
+  const searchTerm = (document.getElementById("searchInput").value || document.getElementById("searchInputMobile").value || "").toLowerCase().trim();
 
   let items = menuData[currentCategory] ? menuData[currentCategory].items : [];
   if (activeTag !== "All") items = items.filter(i => i.tags.includes(activeTag));
   if (searchTerm) items = items.filter(i => i.name.toLowerCase().includes(searchTerm));
 
+  // Filter out of stock
+  items = items.filter(i => !outOfStockItems.has(i.name));
+
   grid.className = layout === "grid" ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "flex flex-col gap-3";
 
-  if (items.length === 0){
-    grid.innerHTML = '';
-    noResults.classList.remove('hidden');
+  if (items.length === 0) {
+    grid.innerHTML = "";
+    noResults.classList.remove("hidden");
     return;
   }
-  noResults.classList.add('hidden');
+  noResults.classList.add("hidden");
 
   grid.innerHTML = items.map((item, idx) => {
-    const tagBadges = item.tags.map(t => `<span class="text-[9px] uppercase tracking-wide bg-[#d4af37]/10 text-[#d4af37] px-2 py-0.5 rounded-full">${t}</span>`).join(' ');
-    const cartQty = getCartQty(item.name);
-    const qtyBadge = cartQty > 0 ? `<span class="text-[9px] bg-[#d4af37] text-[#0f241d] rounded-full w-4 h-4 flex items-center justify-center font-bold absolute -top-1.5 -right-1.5">${cartQty}</span>` : '';
-    const safeName = item.name.replace(/"/g, '&quot;');
+    const tagBadges = item.tags.map(t => {
+      const color = t === "Spicy" ? "bg-red-500/10 text-red-400" : t === "Popular" ? "bg-yellow-500/10 text-yellow-400" : t === "Chef Recommended" ? "bg-purple-500/10 text-purple-400" : "bg-[var(--gold)]/10 text-[var(--gold)]";
+      return `<span class="text-[9px] uppercase tracking-wide ${color} px-2 py-0.5 rounded-full">${t}</span>`;
+    }).join(" ");
 
-    if (layout === "grid"){
-      return `<div class="menu-card animate-entry rounded-xl p-4 flex flex-col justify-between">
+    const cartQty = getCartQty(item.name);
+    const qtyBadge = cartQty > 0 ? `<span class="text-[9px] bg-[var(--gold)] text-[#0f241d] rounded-full w-4 h-4 flex items-center justify-center font-bold absolute -top-1.5 -right-1.5">${cartQty}</span>` : "";
+    const safeName = item.name.replace(/"/g, "&quot;");
+
+    // Happy hour pricing
+    let displayPrice = item.price;
+    if (happyHourActive) displayPrice = Math.round(item.price * 0.8);
+    const priceLabel = happyHourActive ? `<span class="text-gray-500 line-through text-xs mr-1">Rs.${item.price}</span><span class="text-green-400">Rs.${displayPrice}</span>` : `Rs.${item.price}`;
+
+    // Nutrition badge
+    const nutritionBadge = showNutrition ? `<div class="flex gap-2 mt-1 text-[9px] text-gray-400"><span><i class="fa fa-fire mr-0.5"></i>${item.calories || "--"} kcal</span><span><i class="fa fa-dumbbell mr-0.5"></i>${item.protein || "--"}</span></div>` : "";
+
+    // Out of stock overlay
+    const isOut = outOfStockItems.has(item.name);
+    const outOverlay = isOut ? `<div class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-xl"><span class="text-red-400 text-xs font-bold uppercase tracking-wider border border-red-400 px-3 py-1 rounded-full">Out of Stock</span></div>` : "";
+
+    if (layout === "grid") {
+      return `<div class="menu-card animate-entry rounded-xl p-4 flex flex-col justify-between relative cursor-pointer" data-dish="${safeName}" data-cat="${currentCategory}">
+        ${outOverlay}
         <div>
           <div class="flex justify-between items-start gap-2">
-            <h4 class="text-sm font-bold text-white">${item.name}</h4>
-            <span class="text-[#d4af37] font-bold text-sm whitespace-nowrap">₹${item.price}</span>
+            <h4 class="text-sm font-bold text-[var(--text-primary)]">${item.name}</h4>
+            <span class="text-[var(--gold)] font-bold text-sm whitespace-nowrap">${priceLabel}</span>
           </div>
           <div class="flex flex-wrap gap-1.5 mt-2">${tagBadges}</div>
+          ${nutritionBadge}
+          <p class="text-[10px] text-gray-400 mt-1 line-clamp-2">${item.note || ""}</p>
         </div>
-        <button data-action="add-to-cart" data-name="${safeName}" data-price="${item.price}" class="relative w-full mt-4 py-2 bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 rounded text-xs font-bold hover:bg-[#d4af37] hover:text-[#0f241d]">ADD${qtyBadge}</button>
+        <button data-action="add-to-cart" data-name="${safeName}" data-price="${displayPrice}" class="relative w-full mt-4 py-2 bg-[var(--gold)]/10 text-[var(--gold)] border border-[var(--border-gold)] rounded text-xs font-bold hover:bg-[var(--gold)] hover:text-[#0f241d]">ADD${qtyBadge}</button>
       </div>`;
     }
-    return `<div class="menu-card animate-entry rounded-xl p-3 flex items-center justify-between">
-      <div><h4 class="text-sm font-bold text-white">${item.name}</h4><div class="flex flex-wrap gap-1.5 mt-1">${tagBadges}</div></div>
+    return `<div class="menu-card animate-entry rounded-xl p-3 flex items-center justify-between relative cursor-pointer" data-dish="${safeName}" data-cat="${currentCategory}">
+      ${outOverlay}
+      <div class="flex-1">
+        <h4 class="text-sm font-bold text-[var(--text-primary)]">${item.name}</h4>
+        <div class="flex flex-wrap gap-1.5 mt-1">${tagBadges}</div>
+        ${nutritionBadge}
+      </div>
       <div class="text-right flex items-center gap-3">
-        <span class="text-[#d4af37] font-bold text-sm">₹${item.price}</span>
-        <button data-action="add-to-cart" data-name="${safeName}" data-price="${item.price}" class="relative py-1.5 px-3 bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 rounded text-xs font-bold hover:bg-[#d4af37] hover:text-[#0f241d]">ADD${qtyBadge}</button>
+        <span class="text-[var(--gold)] font-bold text-sm">${priceLabel}</span>
+        <button data-action="add-to-cart" data-name="${safeName}" data-price="${displayPrice}" class="relative py-1.5 px-3 bg-[var(--gold)]/10 text-[var(--gold)] border border-[var(--border-gold)] rounded text-xs font-bold hover:bg-[var(--gold)] hover:text-[#0f241d]">ADD${qtyBadge}</button>
       </div>
     </div>`;
-  }).join('');
+  }).join("");
 }
 
-function getCartQty(name){
-  const line = cart.find(i => i.name === name);
+function getCartQty(name) {
+  const line = cart.find(i => i.baseName === name || i.name === name);
   return line ? line.qty : 0;
 }
 
-function addToCart(name, price){
+function addToCart(name, price) {
   const existing = cart.find(i => i.name === name);
   if (existing) existing.qty += 1;
-  else cart.push({ name, price, qty: 1 });
+  else cart.push({ name, baseName: name, price, qty: 1, specialReq: "", spiceLevel: 50, portion: "full" });
   updateCartCount();
 }
 
-function incrementCart(i){ cart[i].qty += 1; updateCartCount(); }
+function incrementCart(i) { cart[i].qty += 1; updateCartCount(); }
+function decrementCart(i) { cart[i].qty -= 1; if (cart[i].qty <= 0) cart.splice(i, 1); updateCartCount(); }
+function removeFromCart(i) { cart.splice(i, 1); updateCartCount(); }
+function cartTotalItems() { return cart.reduce((s, i) => s + i.qty, 0); }
 
-function decrementCart(i){
-  cart[i].qty -= 1;
-  if (cart[i].qty <= 0) cart.splice(i, 1);
-  updateCartCount();
+function saveCart() {
+  try { sessionStorage.setItem("goldenPineCart", JSON.stringify(cart)); } catch(e) {}
+}
+function loadCart() {
+  try { const saved = sessionStorage.getItem("goldenPineCart"); if (saved) cart = JSON.parse(saved); } catch(e) { cart = []; }
 }
 
-function removeFromCart(i){ cart.splice(i, 1); updateCartCount(); }
-
-function cartTotalItems(){ return cart.reduce((s, i) => s + i.qty, 0); }
-
-function saveCart(){
-  try { sessionStorage.setItem('goldenPineCart', JSON.stringify(cart)); } catch(e) { }
-}
-
-function loadCart(){
-  try {
-    const saved = sessionStorage.getItem('goldenPineCart');
-    if (saved) cart = JSON.parse(saved);
-  } catch(e) { cart = []; }
-}
-
-function updateCartCount(){
+function updateCartCount() {
   const totalItems = cartTotalItems();
-  document.getElementById('cartCount').textContent = totalItems;
-  document.getElementById('floatingCartCount').textContent = totalItems;
+  document.getElementById("cartCount").textContent = totalItems;
+  document.getElementById("floatingCartCount").textContent = totalItems;
   saveCart();
   renderCart();
   renderMenu();
 }
 
-function renderCart(){
-  const list = document.getElementById('cartItemsList');
-  if (cart.length === 0){
-    list.innerHTML = '<p class="text-xs text-gray-500 text-center mt-8">Your basket is empty.</p>';
+function renderCart() {
+  const list = document.getElementById("cartItemsList");
+  if (cart.length === 0) {
+    list.innerHTML = "<p class=\"text-xs text-gray-500 text-center mt-8\">Your basket is empty.</p>";
   } else {
     list.innerHTML = cart.map((item, i) => `
-      <div class="flex justify-between items-center bg-[#10221c] p-3 rounded-lg border border-[#d4af37]/10">
+      <div class="flex justify-between items-center bg-[var(--bg-card)] p-3 rounded-lg border border-[var(--border-gold)]">
         <div class="flex-1 min-w-0">
-          <span class="text-xs text-white block truncate">${item.name}</span>
-          <span class="text-[10px] text-gray-500">₹${item.price} each</span>
+          <span class="text-xs text-[var(--text-primary)] block truncate">${item.name}</span>
+          ${item.specialReq ? `<span class="text-[9px] text-gray-500 block"><i class="fa fa-comment mr-0.5"></i>${item.specialReq}</span>` : ""}
+          <span class="text-[10px] text-gray-500">Rs.${item.price} each</span>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
-          <button data-action="decrement" data-index="${i}" class="w-6 h-6 rounded-full bg-[#143228] text-[#d4af37] text-xs flex items-center justify-center hover:bg-[#d4af37] hover:text-[#0f241d]">−</button>
-          <span class="text-xs text-white w-4 text-center">${item.qty}</span>
-          <button data-action="increment" data-index="${i}" class="w-6 h-6 rounded-full bg-[#143228] text-[#d4af37] text-xs flex items-center justify-center hover:bg-[#d4af37] hover:text-[#0f241d]">+</button>
-          <span class="text-[#d4af37] text-xs font-bold w-12 text-right">₹${item.price * item.qty}</span>
+          <button data-action="decrement" data-index="${i}" class="w-6 h-6 rounded-full bg-[var(--bg-hover)] text-[var(--gold)] text-xs flex items-center justify-center hover:bg-[var(--gold)] hover:text-[#0f241d]">−</button>
+          <span class="text-xs text-[var(--text-primary)] w-4 text-center">${item.qty}</span>
+          <button data-action="increment" data-index="${i}" class="w-6 h-6 rounded-full bg-[var(--bg-hover)] text-[var(--gold)] text-xs flex items-center justify-center hover:bg-[var(--gold)] hover:text-[#0f241d]">+</button>
+          <span class="text-[var(--gold)] text-xs font-bold w-12 text-right">Rs.${item.price * item.qty}</span>
           <button data-action="remove" data-index="${i}" class="text-gray-500 hover:text-red-400 text-xs"><i class="fa fa-times"></i></button>
         </div>
-      </div>`).join('');
+      </div>
+    `).join("");
   }
+
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const packaging = cartTotalItems() * 20;
-  document.getElementById('subtotalPrice').textContent = `₹${subtotal}`;
-  document.getElementById('packCharge').textContent = `₹${packaging}`;
-  document.getElementById('grandTotalPrice').textContent = `₹${subtotal + packaging}`;
+  let discount = 0;
+  if (happyHourActive) discount = Math.round(subtotal * 0.2);
+  if (customDiscount > 0) discount = Math.round(subtotal * customDiscount / 100);
+
+  document.getElementById("subtotalPrice").textContent = "Rs." + subtotal;
+  document.getElementById("packCharge").textContent = "Rs." + packaging;
+
+  if (discount > 0) {
+    document.getElementById("discountRow").classList.remove("hidden");
+    document.getElementById("discountAmount").textContent = "-Rs." + discount;
+  } else {
+    document.getElementById("discountRow").classList.add("hidden");
+  }
+
+  document.getElementById("grandTotalPrice").textContent = "Rs." + (subtotal + packaging - discount);
+
+  // Update split bill
+  renderSplitBill();
 }
 
-function sendAssistance(type){
-  openWhatsApp('Assistance Needed: ' + type);
-  notifyBackend('assistance', { request: type, table: document.getElementById('tableNumberInput').value || null });
-  document.getElementById('assistanceModal').classList.add('hidden');
-  document.getElementById('assistanceModal').classList.remove('flex');
+function sendAssistance(type) {
+  openWhatsApp("Assistance Needed: " + type);
+  notifyBackend("assistance", { request: type, table: tableNumber || null });
+  document.getElementById("assistanceModal").classList.add("hidden");
+  document.getElementById("assistanceModal").classList.remove("flex");
 }
 
-// ===== WIRING (No inline onclick) =====
-document.getElementById('viewCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.remove('translate-x-full'));
-document.getElementById('floatingCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.remove('translate-x-full'));
-document.getElementById('closeCartBtn').addEventListener('click', () => document.getElementById('cartModal').classList.add('translate-x-full'));
+// ==================== EVENT DELEGATION ====================
+function setupEventDelegation() {
+  // Menu items - click to open detail modal, add button to add to cart
+  document.getElementById("menuItemsGrid").addEventListener("click", function(e) {
+    const card = e.target.closest("[data-dish]");
+    const btn = e.target.closest("[data-action=\"add-to-cart\"]");
 
-document.getElementById('openFeedbackBtn').addEventListener('click', () => { document.getElementById('feedbackModal').classList.remove('hidden'); document.getElementById('feedbackModal').classList.add('flex'); });
-document.getElementById('closeFeedbackBtn').addEventListener('click', () => { document.getElementById('feedbackModal').classList.add('hidden'); document.getElementById('feedbackModal').classList.remove('flex'); });
+    if (btn) {
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price);
+      addToCart(name, price);
+      showToast(name + " added!");
+    } else if (card && !e.target.closest("button")) {
+      const dishName = card.dataset.dish;
+      const catName = card.dataset.cat;
+      const dish = menuData[catName].items.find(i => i.name === dishName);
+      if (dish) openDishModal(dish, catName);
+    }
+  });
 
-document.getElementById('openAssistanceBtn').addEventListener('click', () => { document.getElementById('assistanceModal').classList.remove('hidden'); document.getElementById('assistanceModal').classList.add('flex'); });
-document.getElementById('closeAssistanceBtn').addEventListener('click', () => { document.getElementById('assistanceModal').classList.add('hidden'); document.getElementById('assistanceModal').classList.remove('flex'); });
+  // Thali list
+  document.getElementById("thaliList").addEventListener("click", function(e) {
+    const btn = e.target.closest("[data-action=\"add-to-cart\"]");
+    if (btn) {
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price);
+      addToCart(name, price);
+      showToast(name + " added!");
+    }
+  });
+
+  // Cart items
+  document.getElementById("cartItemsList").addEventListener("click", function(e) {
+    const incBtn = e.target.closest("[data-action=\"increment\"]");
+    const decBtn = e.target.closest("[data-action=\"decrement\"]");
+    const remBtn = e.target.closest("[data-action=\"remove\"]");
+    if (incBtn) incrementCart(parseInt(incBtn.dataset.index));
+    else if (decBtn) decrementCart(parseInt(decBtn.dataset.index));
+    else if (remBtn) removeFromCart(parseInt(remBtn.dataset.index));
+  });
+
+  // Assistance buttons
+  document.querySelectorAll(".assist-btn").forEach(btn => {
+    btn.addEventListener("click", function() { sendAssistance(this.dataset.assist); });
+  });
+}
+
+// ==================== MODAL WIRING ====================
+document.getElementById("viewCartBtn").addEventListener("click", () => document.getElementById("cartModal").classList.remove("translate-x-full"));
+document.getElementById("floatingCartBtn").addEventListener("click", () => document.getElementById("cartModal").classList.remove("translate-x-full"));
+document.getElementById("closeCartBtn").addEventListener("click", () => document.getElementById("cartModal").classList.add("translate-x-full"));
+
+document.getElementById("openFeedbackBtn").addEventListener("click", () => { document.getElementById("feedbackModal").classList.remove("hidden"); document.getElementById("feedbackModal").classList.add("flex"); });
+document.getElementById("closeFeedbackBtn").addEventListener("click", () => { document.getElementById("feedbackModal").classList.add("hidden"); document.getElementById("feedbackModal").classList.remove("flex"); });
+
+document.getElementById("openAssistanceBtn").addEventListener("click", () => { document.getElementById("assistanceModal").classList.remove("hidden"); document.getElementById("assistanceModal").classList.add("flex"); });
+document.getElementById("closeAssistanceBtn").addEventListener("click", () => { document.getElementById("assistanceModal").classList.add("hidden"); document.getElementById("assistanceModal").classList.remove("flex"); });
 
 let selectedRating = 0;
-document.querySelectorAll('.star-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
+document.querySelectorAll(".star-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
     selectedRating = parseInt(btn.dataset.rating);
-    document.querySelectorAll('.star-btn').forEach(b => {
-      b.classList.toggle('text-[#d4af37]', parseInt(b.dataset.rating) <= selectedRating);
-      b.classList.toggle('text-gray-600', parseInt(b.dataset.rating) > selectedRating);
+    document.querySelectorAll(".star-btn").forEach(b => {
+      b.classList.toggle("text-[var(--gold)]", parseInt(b.dataset.rating) <= selectedRating);
+      b.classList.toggle("text-gray-600", parseInt(b.dataset.rating) > selectedRating);
     });
   });
 });
 
-document.getElementById('submitFeedbackBtn').addEventListener('click', function(){
-  const name = document.getElementById('feedbackName').value || 'Guest';
-  const comment = document.getElementById('feedbackComment').value || '';
-  const msg = `*Guest Feedback*\nRating: ${selectedRating || 'N/A'}/5\nName: ${name}\nComments: ${comment}`;
+document.getElementById("submitFeedbackBtn").addEventListener("click", function() {
+  const name = document.getElementById("feedbackName").value || "Guest";
+  const comment = document.getElementById("feedbackComment").value || "";
+  const msg = `*Guest Feedback*\nRating: ${selectedRating || "N/A"}/5\nName: ${name}\nComments: ${comment}`;
   openWhatsApp(msg);
-  notifyBackend('feedback', { name, rating: selectedRating || null, comment });
-  document.getElementById('feedbackModal').classList.add('hidden');
-  document.getElementById('feedbackModal').classList.remove('flex');
+  notifyBackend("feedback", { name, rating: selectedRating || null, comment });
+  document.getElementById("feedbackModal").classList.add("hidden");
+  document.getElementById("feedbackModal").classList.remove("flex");
 });
 
-document.getElementById('layoutGridBtn').addEventListener('click', function(){
+document.getElementById("layoutGridBtn").addEventListener("click", function() {
   layout = "grid";
-  this.classList.add('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
-  document.getElementById('layoutListBtn').classList.remove('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
+  this.classList.add("bg-[var(--bg-hover)]", "text-[var(--gold)]", "border-[var(--border-gold)]");
+  document.getElementById("layoutListBtn").classList.remove("bg-[var(--bg-hover)]", "text-[var(--gold)]", "border-[var(--border-gold)]");
   renderMenu();
 });
-document.getElementById('layoutListBtn').addEventListener('click', function(){
+document.getElementById("layoutListBtn").addEventListener("click", function() {
   layout = "list";
-  this.classList.add('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
-  document.getElementById('layoutGridBtn').classList.remove('bg-[#132f25]','text-[#d4af37]','border-[#d4af37]/25');
+  this.classList.add("bg-[var(--bg-hover)]", "text-[var(--gold)]", "border-[var(--border-gold)]");
+  document.getElementById("layoutGridBtn").classList.remove("bg-[var(--bg-hover)]", "text-[var(--gold)]", "border-[var(--border-gold)]");
   renderMenu();
 });
 
-document.getElementById('searchInput').addEventListener('input', renderMenu);
-document.getElementById('searchInputMobile').addEventListener('input', renderMenu);
+document.getElementById("searchInput").addEventListener("input", renderMenu);
+document.getElementById("searchInputMobile").addEventListener("input", renderMenu);
 
-document.getElementById('checkoutBtn').addEventListener('click', function(){
+document.getElementById("checkoutBtn").addEventListener("click", function() {
   if (cart.length === 0) return;
   const btn = this;
   const original = btn.innerHTML;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
   setTimeout(() => {
-    const table = document.getElementById('tableNumberInput').value || "No Table Specified";
-    const note = document.getElementById('specialRequest').value || "None";
+    const table = tableNumber || "No Table Specified";
+    const note = document.getElementById("specialRequest").value || "None";
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const packaging = cartTotalItems() * 20;
-    const msg = `*New Order: ${table}*\n\nItems:\n${cart.map(i => `- ${i.name} x${i.qty} (₹${i.price * i.qty})`).join('\n')}\n\nSpecial Request: ${note}\nSubtotal: ₹${subtotal}\nPackaging: ₹${packaging}\n*Total: ₹${subtotal + packaging}*`;
-    if (isWhatsAppConfigured()){
+    let discount = 0;
+    if (happyHourActive) discount = Math.round(subtotal * 0.2);
+    if (customDiscount > 0) discount = Math.round(subtotal * customDiscount / 100);
+    const total = subtotal + packaging - discount;
+
+    const msg = `*New Order: ${table}*\n\nItems:\n${cart.map(i => `- ${i.name} x${i.qty} (Rs.${i.price * i.qty})${i.specialReq ? " [" + i.specialReq + "]" : ""}`).join("\n")}\n\nSpecial Request: ${note}\nSubtotal: Rs.${subtotal}\nPackaging: Rs.${packaging}${discount > 0 ? "\nDiscount: -Rs." + discount : ""}\n*Total: Rs.${total}*`;
+
+    if (isWhatsAppConfigured()) {
       openWhatsApp(msg);
-      notifyBackend('order', { table, note, items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })), subtotal, packaging, total: subtotal + packaging });
+      notifyBackend("order", { table, note, items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })), subtotal, packaging, discount, total });
+
+      // Save to order history
+      orderHistory.push({ table, items: [...cart], total, status: "received", time: new Date().toISOString() });
+
+      // Start tracking
+      startOrderTracking();
+
       cart = [];
       updateCartCount();
-      document.getElementById('cartModal').classList.add('translate-x-full');
     } else {
       openWhatsApp(msg);
     }
@@ -756,7 +1472,43 @@ document.getElementById('checkoutBtn').addEventListener('click', function(){
   }, 800);
 });
 
-// Initialize
+// ==================== UTILITIES ====================
+function isWhatsAppConfigured() { return /^\d{10,15}$/.test(WHATSAPP_NUMBER); }
+
+function showToast(message) {
+  let toast = document.getElementById("appToast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "appToast";
+    toast.className = "fixed bottom-6 left-1/2 -translate-x-1/2 bg-[var(--bg-secondary)] border border-[var(--border-gold)] text-[var(--text-primary)] text-xs px-4 py-3 rounded-xl shadow-[var(--shadow-luxury)] z-[70] max-w-xs text-center";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.style.opacity = "1";
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => { toast.style.opacity = "0"; }, 3500);
+}
+
+function openWhatsApp(message) {
+  if (!isWhatsAppConfigured()) {
+    showToast("WhatsApp ordering isn't set up yet.");
+    return;
+  }
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+}
+
+async function notifyBackend(type, data) {
+  if (!CLOUDFLARE_WORKER_URL) return;
+  try {
+    await fetch(CLOUDFLARE_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type, ...data, timestamp: new Date().toISOString() })
+    });
+  } catch (e) { console.error("Backend notify failed:", e); }
+}
+
+// ==================== INIT ====================
 loadCart();
 renderThali();
 renderTabs();
@@ -764,6 +1516,8 @@ renderTagFilters();
 renderMenu();
 updateCartCount();
 setupEventDelegation();
+applyTranslations();
+startCountdown();
 </script>
 </body>
 </html>
